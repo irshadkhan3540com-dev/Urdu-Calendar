@@ -34,7 +34,7 @@ jobs:
               android:height="512dp"
               android:viewportWidth="108"
               android:viewportHeight="108">
-              
+
               <path android:pathData="M 12,8 h 84 q 12,0 12,12 v 68 q 0,12 -12,12 h -84 q -12,0 -12,-12 v -68 q 0,-12 12,-12 z">
                   <aapt:attr name="android:fillColor">
                       <gradient
@@ -51,9 +51,9 @@ jobs:
               <path android:pathData="M 12,8 h 84 q 12,0 12,12 v 30 q -54,15 -96,0 v -30 q 0,-12 12,-12 z"
                     android:fillColor="#1AFFFFFF"/>
 
-              <path android:pathData="M 64, 20 C 32, 17 12, 47 22, 77 C 30, 97 47, 104 64, 92 C 37, 90 27, 62 32, 42 C 37, 27 47, 20 64, 20 Z" 
+              <path android:pathData="M 64, 20 C 32, 17 12, 47 22, 77 C 30, 97 47, 104 64, 92 C 37, 90 27, 62 32, 42 C 37, 27 47, 20 64, 20 Z"
                     android:fillColor="#40000000"/>
-              <path android:pathData="M 80, 27 L 84, 37 L 95, 37 L 86, 44 L 89, 55 L 80, 48 L 71, 55 L 74, 44 L 65, 37 L 76, 37 Z" 
+              <path android:pathData="M 80, 27 L 84, 37 L 95, 37 L 86, 44 L 89, 55 L 80, 48 L 71, 55 L 74, 44 L 65, 37 L 76, 37 Z"
                     android:fillColor="#40000000"/>
 
               <path android:pathData="M 62, 18 C 30, 15 10, 45 20, 75 C 28, 95 45, 102 62, 90 C 35, 88 25, 60 30, 40 C 35, 25 45, 18 62, 18 Z">
@@ -85,7 +85,7 @@ jobs:
           </vector>
           EOF
 
-      - name: 5. Write Android App Strings & Colors
+      - name: 5. Write Android App Strings, Colors & Neumorphism Drawables
         run: |
           cat << 'EOF' > app/src/main/res/values/strings.xml
           <resources>
@@ -111,7 +111,69 @@ jobs:
           </resources>
           EOF
 
-      - name: 6. Write Full Premium 12-Month Java App (UI + Logic)
+          # Neumorphic soft-card background (light-to-soft-grey gradient gives the "raised" feel)
+          cat << 'EOF' > app/src/main/res/drawable/neumorphic_card_bg.xml
+          <shape xmlns:android="http://schemas.android.com/apk/res/android"
+              android:shape="rectangle">
+              <gradient
+                  android:angle="135"
+                  android:startColor="#FFFFFF"
+                  android:centerColor="#F4F7F6"
+                  android:endColor="#E9EEEC"
+                  android:type="linear" />
+              <corners android:radius="20dp" />
+          </shape>
+          EOF
+
+          # Neumorphic header gradient (gives the header a embossed/glossy strip)
+          cat << 'EOF' > app/src/main/res/drawable/neumorphic_header_bg.xml
+          <shape xmlns:android="http://schemas.android.com/apk/res/android"
+              android:shape="rectangle">
+              <gradient
+                  android:angle="90"
+                  android:startColor="#16653A"
+                  android:centerColor="#0F5132"
+                  android:endColor="#0A3622"
+                  android:type="linear" />
+              <corners
+                  android:topLeftRadius="20dp"
+                  android:topRightRadius="20dp"
+                  android:bottomLeftRadius="0dp"
+                  android:bottomRightRadius="0dp" />
+          </shape>
+          EOF
+
+          # Neumorphic "today" pill - soft golden raised effect
+          cat << 'EOF' > app/src/main/res/drawable/neumorphic_today_bg.xml
+          <shape xmlns:android="http://schemas.android.com/apk/res/android"
+              android:shape="rectangle">
+              <gradient
+                  android:angle="135"
+                  android:startColor="#FFF6C8"
+                  android:centerColor="#FEF08A"
+                  android:endColor="#FBDF6B"
+                  android:type="linear" />
+              <corners android:radius="12dp" />
+              <stroke android:width="1dp" android:color="#F2C94C" />
+          </shape>
+          EOF
+
+          # Neumorphic festival pill - soft green raised effect
+          cat << 'EOF' > app/src/main/res/drawable/neumorphic_festival_bg.xml
+          <shape xmlns:android="http://schemas.android.com/apk/res/android"
+              android:shape="rectangle">
+              <gradient
+                  android:angle="135"
+                  android:startColor="#F0FDF4"
+                  android:centerColor="#DCFCE7"
+                  android:endColor="#BBF7D0"
+                  android:type="linear" />
+              <corners android:radius="12dp" />
+              <stroke android:width="1dp" android:color="#22C55E" />
+          </shape>
+          EOF
+
+      - name: 6. Write Full Premium 12-Month Java App (UI + Logic + Neumorphism)
         run: |
           cat << 'EOF' > app/src/main/java/com/zeeshan/urducalendar/MainActivity.java
           package com.zeeshan.urducalendar;
@@ -124,12 +186,13 @@ jobs:
           import android.view.View;
           import android.widget.*;
           import androidx.appcompat.app.AppCompatActivity;
+          import androidx.cardview.widget.CardView;
           import java.time.LocalDate;
           import java.time.chrono.HijrahDate;
           import java.time.temporal.ChronoField;
 
           public class MainActivity extends AppCompatActivity {
-              private int hijriOffset = 0; 
+              private int hijriOffset = 0;
               private LinearLayout mainScrollContainer;
               private TextView offsetDisplay;
 
@@ -152,23 +215,23 @@ jobs:
                   root.setOrientation(LinearLayout.VERTICAL);
                   root.setBackgroundColor(Color.parseColor("#EBF4F6"));
 
-                  // 👑 ROYAL HEADER BAR
+                  // ðŸ‘‘ ROYAL HEADER BAR
                   TextView headerBar = new TextView(this);
-                  headerBar.setText("👑 Zeeshan Husain 👑");
-                  headerBar.setBackgroundColor(Color.parseColor("#0F5132")); 
-                  headerBar.setTextColor(Color.parseColor("#FFD700")); 
+                  headerBar.setText("ðŸ‘‘ Zeeshan Husain ðŸ‘‘");
+                  headerBar.setBackgroundColor(Color.parseColor("#0F5132"));
+                  headerBar.setTextColor(Color.parseColor("#FFD700"));
                   headerBar.setTextSize(24);
                   headerBar.setTypeface(null, Typeface.BOLD);
                   headerBar.setGravity(Gravity.CENTER);
                   headerBar.setPadding(0, 35, 0, 35);
                   root.addView(headerBar);
 
-                  // 🕌 POSTER BANNER SECTION
+                  // ðŸ•Œ POSTER BANNER SECTION
                   LinearLayout posterBanner = new LinearLayout(this);
                   posterBanner.setOrientation(LinearLayout.VERTICAL);
                   posterBanner.setGravity(Gravity.CENTER);
                   posterBanner.setPadding(20, 40, 20, 40);
-                  
+
                   GradientDrawable bannerBg = new GradientDrawable(
                       GradientDrawable.Orientation.TOP_BOTTOM,
                       new int[] { Color.parseColor("#0A3622"), Color.parseColor("#14532D") }
@@ -176,7 +239,7 @@ jobs:
                   posterBanner.setBackground(bannerBg);
 
                   TextView posterTitle = new TextView(this);
-                  posterTitle.setText("2026 \nاسلامک کلینڈر");
+                  posterTitle.setText("2026 \nØ§Ø³Ù„Ø§Ù…Ú© Ú©Ù„ÛŒÙ†ÚˆØ±");
                   posterTitle.setTextColor(Color.parseColor("#FFD700"));
                   posterTitle.setTextSize(32);
                   posterTitle.setGravity(Gravity.CENTER);
@@ -184,7 +247,7 @@ jobs:
                   posterBanner.addView(posterTitle);
 
                   TextView posterSub = new TextView(this);
-                  posterSub.setText("ISLAMIC CALENDAR • 1447-48 HIJRI");
+                  posterSub.setText("ISLAMIC CALENDAR â€¢ 1447-48 HIJRI");
                   posterSub.setTextColor(Color.WHITE);
                   posterSub.setTextSize(14);
                   posterSub.setGravity(Gravity.CENTER);
@@ -192,15 +255,23 @@ jobs:
                   posterBanner.addView(posterSub);
                   root.addView(posterBanner);
 
-                  // 🌙 CHAND MOON ADJUSTMENT PANEL
+                  // ðŸŒ™ CHAND MOON ADJUSTMENT PANEL (also given a soft neumorphic CardView wrap)
+                  CardView offsetCard = new CardView(this);
+                  LinearLayout.LayoutParams offsetCardParams = new LinearLayout.LayoutParams(-1, -2);
+                  offsetCardParams.setMargins(20, 20, 20, 10);
+                  offsetCard.setLayoutParams(offsetCardParams);
+                  offsetCard.setRadius(16f);
+                  offsetCard.setCardElevation(10f);
+                  offsetCard.setCardBackgroundColor(Color.WHITE);
+                  offsetCard.setUseCompatPadding(true);
+
                   LinearLayout offsetPanel = new LinearLayout(this);
                   offsetPanel.setOrientation(LinearLayout.HORIZONTAL);
                   offsetPanel.setGravity(Gravity.CENTER);
-                  offsetPanel.setBackgroundColor(Color.parseColor("#FFFFFF"));
                   offsetPanel.setPadding(10, 15, 10, 15);
 
                   Button minusOffset = new Button(this);
-                  minusOffset.setText("🌙 -1 Din");
+                  minusOffset.setText("ðŸŒ™ -1 Din");
                   minusOffset.setBackgroundColor(Color.parseColor("#E2E8F0"));
                   minusOffset.setTextColor(Color.BLACK);
                   minusOffset.setOnClickListener(v -> { hijriOffset--; renderAllMonths(); });
@@ -212,7 +283,7 @@ jobs:
                   offsetDisplay.setPadding(40, 0, 40, 0);
 
                   Button plusOffset = new Button(this);
-                  plusOffset.setText("🌙 +1 Din");
+                  plusOffset.setText("ðŸŒ™ +1 Din");
                   plusOffset.setBackgroundColor(Color.parseColor("#E2E8F0"));
                   plusOffset.setTextColor(Color.BLACK);
                   plusOffset.setOnClickListener(v -> { hijriOffset++; renderAllMonths(); });
@@ -220,12 +291,13 @@ jobs:
                   offsetPanel.addView(minusOffset);
                   offsetPanel.addView(offsetDisplay);
                   offsetPanel.addView(plusOffset);
-                  root.addView(offsetPanel);
+                  offsetCard.addView(offsetPanel);
+                  root.addView(offsetCard);
 
                   ScrollView mainScrollView = new ScrollView(this);
                   mainScrollContainer = new LinearLayout(this);
                   mainScrollContainer.setOrientation(LinearLayout.VERTICAL);
-                  mainScrollContainer.setPadding(20, 20, 20, 40);
+                  mainScrollContainer.setPadding(20, 10, 20, 40);
                   mainScrollView.addView(mainScrollContainer);
                   root.addView(mainScrollView);
 
@@ -242,19 +314,24 @@ jobs:
                   }
               }
 
+              // ðŸª„ NEUMORPHISM: Every month is now a CardView with elevation + soft gradient
+              // background instead of a flat bordered LinearLayout. This gives the
+              // "embossed / raised from the same surface" look (like the reference 3D image).
               private View createMonthCard(int year, int month) {
-                  LinearLayout card = new LinearLayout(this);
-                  card.setOrientation(LinearLayout.VERTICAL);
-                  
+                  CardView card = new CardView(this);
                   LinearLayout.LayoutParams cardParams = new LinearLayout.LayoutParams(-1, -2);
                   cardParams.setMargins(0, 0, 0, 30);
                   card.setLayoutParams(cardParams);
+                  card.setRadius(20f);
+                  card.setCardElevation(10f);          // <-- raised/elevated Neumorphic effect
+                  card.setMaxCardElevation(14f);
+                  card.setCardBackgroundColor(Color.WHITE);
+                  card.setUseCompatPadding(true);
+                  card.setPreventCornerOverlap(false);
 
-                  GradientDrawable cardBg = new GradientDrawable();
-                  cardBg.setColor(Color.WHITE);
-                  cardBg.setCornerRadius(18f);
-                  cardBg.setStroke(4, Color.parseColor("#0F5132"));
-                  card.setBackground(cardBg);
+                  LinearLayout inner = new LinearLayout(this);
+                  inner.setOrientation(LinearLayout.VERTICAL);
+                  inner.setBackgroundResource(R.drawable.neumorphic_card_bg); // soft white->grey gradient
 
                   LocalDate firstDay = LocalDate.of(year, month, 1);
                   LocalDate midDay = LocalDate.of(year, month, 15);
@@ -265,7 +342,7 @@ jobs:
 
                   LinearLayout monthHeader = new LinearLayout(this);
                   monthHeader.setOrientation(LinearLayout.HORIZONTAL);
-                  monthHeader.setBackgroundColor(Color.parseColor("#0F5132"));
+                  monthHeader.setBackgroundResource(R.drawable.neumorphic_header_bg); // glossy gradient header
                   monthHeader.setPadding(20, 20, 20, 20);
 
                   TextView engMonthText = new TextView(this);
@@ -284,12 +361,12 @@ jobs:
 
                   monthHeader.addView(engMonthText);
                   monthHeader.addView(urduMonthText);
-                  card.addView(monthHeader);
+                  inner.addView(monthHeader);
 
                   TableLayout weekdayTable = new TableLayout(this);
                   TableRow weekdayRow = new TableRow(this);
                   weekdayRow.setPadding(0, 15, 0, 15);
-                  
+
                   String[] days = {"SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"};
                   for (int i = 0; i < days.length; i++) {
                       TextView tv = new TextView(this);
@@ -298,25 +375,25 @@ jobs:
                       tv.setGravity(Gravity.CENTER);
                       tv.setTypeface(null, Typeface.BOLD);
                       if (i == 0) {
-                          tv.setTextColor(Color.parseColor("#D32F2F")); 
+                          tv.setTextColor(Color.parseColor("#D32F2F"));
                       } else {
                           tv.setTextColor(Color.parseColor("#0A3622"));
                       }
                       weekdayRow.addView(tv, new TableRow.LayoutParams(0, -2, 1f));
                   }
                   weekdayTable.addView(weekdayRow);
-                  card.addView(weekdayTable);
+                  inner.addView(weekdayTable);
 
                   View div = new View(this);
                   div.setLayoutParams(new LinearLayout.LayoutParams(-1, 2));
                   div.setBackgroundColor(Color.parseColor("#E2E8F0"));
-                  card.addView(div);
+                  inner.addView(div);
 
                   TableLayout daysGrid = new TableLayout(this);
                   daysGrid.setPadding(10, 15, 10, 15);
 
                   int totalDays = firstDay.lengthOfMonth();
-                  int dayOfWeekValue = firstDay.getDayOfWeek().getValue() % 7; 
+                  int dayOfWeekValue = firstDay.getDayOfWeek().getValue() % 7;
 
                   TableRow currentRow = new TableRow(this);
 
@@ -337,30 +414,25 @@ jobs:
                       cell.setGravity(Gravity.CENTER);
                       cell.setPadding(5, 12, 5, 12);
 
-                      if (loopDate.equals(LocalDate.now())) {
-                          GradientDrawable todayBg = new GradientDrawable();
-                          todayBg.setColor(Color.parseColor("#FEF08A")); 
-                          todayBg.setCornerRadius(10f);
-                          cell.setBackground(todayBg);
-                      }
-
                       String festivalName = checkIslamicFestival(hDay, hMon);
-                      if (!festivalName.isEmpty()) {
-                          GradientDrawable festBg = new GradientDrawable();
-                          festBg.setColor(Color.parseColor("#DCFCE7")); 
-                          festBg.setCornerRadius(10f);
-                          festBg.setStroke(2, Color.parseColor("#22C55E"));
-                          cell.setBackground(festBg);
+
+                      // Neumorphic pills: soft gradient + thin stroke instead of flat fill
+                      if (loopDate.equals(LocalDate.now())) {
+                          cell.setBackgroundResource(R.drawable.neumorphic_today_bg);
+                          cell.setElevation(4f);
+                      } else if (!festivalName.isEmpty()) {
+                          cell.setBackgroundResource(R.drawable.neumorphic_festival_bg);
+                          cell.setElevation(4f);
                       }
 
                       TextView engDayTv = new TextView(this);
                       engDayTv.setText(String.valueOf(day));
                       engDayTv.setTextSize(16);
                       engDayTv.setTypeface(null, Typeface.BOLD);
-                      
+
                       int currentColumn = (day + dayOfWeekValue - 1) % 7;
                       if (currentColumn == 0) {
-                          engDayTv.setTextColor(Color.parseColor("#D32F2F")); 
+                          engDayTv.setTextColor(Color.parseColor("#D32F2F"));
                       } else {
                           engDayTv.setTextColor(Color.parseColor("#1E293B"));
                       }
@@ -393,7 +465,7 @@ jobs:
                           currentRow = new TableRow(this);
                       }
                   }
-                  card.addView(daysGrid);
+                  inner.addView(daysGrid);
 
                   StringBuilder monthFestivals = new StringBuilder();
                   for (int day = 1; day <= totalDays; day++) {
@@ -401,7 +473,7 @@ jobs:
                       HijrahDate hDate = HijrahDate.from(loopDate.plusDays(hijriOffset));
                       String fest = checkIslamicFestival(hDate.get(ChronoField.DAY_OF_MONTH), hDate.get(ChronoField.MONTH_OF_YEAR));
                       if (!fest.isEmpty()) {
-                          monthFestivals.append("• ").append(hDate.get(ChronoField.DAY_OF_MONTH)).append(" ").append(hijriMonths[hDate.get(ChronoField.MONTH_OF_YEAR) - 1]).append(" -> ").append(fest).append("\n");
+                          monthFestivals.append("â€¢ ").append(hDate.get(ChronoField.DAY_OF_MONTH)).append(" ").append(hijriMonths[hDate.get(ChronoField.MONTH_OF_YEAR) - 1]).append(" -> ").append(fest).append("\n");
                       }
                   }
 
@@ -412,9 +484,10 @@ jobs:
                       festFooter.setTextSize(12);
                       festFooter.setPadding(20, 10, 20, 20);
                       festFooter.setBackgroundColor(Color.parseColor("#F8FAFC"));
-                      card.addView(festFooter);
+                      inner.addView(festFooter);
                   }
 
+                  card.addView(inner);
                   return card;
               }
 
@@ -517,6 +590,7 @@ jobs:
           dependencies {
               implementation 'androidx.appcompat:appcompat:1.6.1'
               implementation 'com.google.android.material:material:1.11.0'
+              implementation 'androidx.cardview:cardview:1.0.0'
           }
           EOF
 
@@ -531,4 +605,3 @@ jobs:
         with:
           name: Urdu-Calendar-Poster-App
           path: app/build/outputs/apk/debug/*.apk
-
