@@ -1,0 +1,438 @@
+name: Build Urdu Calendar App
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 1. Checkout Code
+        uses: actions/checkout@v4
+
+      - name: 2. Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: 3. Create Android Directory Structure
+        run: |
+          mkdir -p app/src/main/java/com/zeeshan/urducalendar
+          mkdir -p app/src/main/res/values
+          mkdir -p app/src/main/res/drawable
+          mkdir -p app/src/main/res/layout
+
+      - name: 4. Build Code-Driven App Icon (Chand Tara Vector)
+        run: |
+          cat << 'EOF' > app/src/main/res/drawable/app_icon.xml
+          <vector xmlns:android="http://schemas.android.com/apk/res/android"
+              android:width="512dp"
+              android:height="512dp"
+              android:viewportWidth="108"
+              android:viewportHeight="108">
+              
+              <!-- Islamic Deep Green Round Background -->
+              <path
+                  android:fillColor="#0F5132"
+                  android:pathData="M54,54m-50,0a50,50 0,1 1,100 0a50,50 0,1 1,-100 0"/>
+              
+              <!-- Elegant Golden Crescent Moon -->
+              <path
+                  android:fillColor="#FFD700"
+                  android:pathData="M65,32 C50,32 36,44 36,60 C36,76 50,88 65,88 C56,88 46,80 46,60 C46,40 56,32 65,32 Z"/>
+              
+              <!-- Golden 5-Pointed Star -->
+              <path
+                  android:fillColor="#FFD700"
+                  android:pathData="M66,45 L68,50 L73,50 L69,53 L71,58 L66,55 L61,58 L63,53 L59,50 L64,50 Z"/>
+          </vector>
+          EOF
+
+      - name: 5. Write Android App Strings & Colors
+        run: |
+          cat << 'EOF' > app/src/main/res/values/strings.xml
+          <resources>
+              <string name="app_name">Urdu Calendar</string>
+          </resources>
+          EOF
+
+          cat << 'EOF' > app/src/main/res/values/colors.xml
+          <resources>
+              <color name="colorPrimary">#0F5132</color>
+              <color name="colorPrimaryDark">#0A3622</color>
+              <color name="colorAccent">#FFD700</color>
+          </resources>
+          EOF
+
+          cat << 'EOF' > app/src/main/res/values/themes.xml
+          <resources>
+              <style name="Theme.UrduCalendar" parent="Theme.AppCompat.Light.NoActionBar">
+                  <item name="colorPrimary">@color/colorPrimary</item>
+                  <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+                  <item name="colorAccent">@color/colorAccent</item>
+              </style>
+          </resources>
+          EOF
+
+      - name: 6. Write Full Premium Java App (UI + Logic)
+        run: |
+          cat << 'EOF' > app/src/main/java/com/zeeshan/urducalendar/MainActivity.java
+          package com.zeeshan.urducalendar;
+
+          import android.graphics.Color;
+          import android.graphics.Typeface;
+          import android.os.Bundle;
+          import android.view.Gravity;
+          import android.view.View;
+          import android.widget.*;
+          import androidx.appcompat.app.AppCompatActivity;
+          import java.time.LocalDate;
+          import java.time.chrono.HijriDate;
+          import java.time.temporal.ChronoUnit;
+          import java.util.Locale;
+
+          public class MainActivity extends AppCompatActivity {
+              private int hijriOffset = 0; // Moon Sighting manual adjust karne ke liye (+1 / -1)
+              private LocalDate currentDisplayDate = LocalDate.now();
+              
+              private TextView monthYearTitle;
+              private TableLayout calendarGrid;
+              private TextView eventListView;
+              private TextView offsetDisplay;
+
+              private final String[] hijriMonths = {
+                  "Muharram", "Safar", "Rabi al-Awwal", "Rabi al-Thani",
+                  "Jumada al-Awwal", "Jumada al-Thani", "Rajab", "Sha'ban",
+                  "Ramadan", "Shawwal", "Dhu al-Qadah", "Dhu al-Hijjah"
+              };
+
+              @Override
+              protected void onCreate(Bundle savedInstanceState) {
+                  super.onCreate(savedInstanceState);
+
+                  // Main Full Screen Layout
+                  LinearLayout root = new LinearLayout(this);
+                  root.setOrientation(LinearLayout.VERTICAL);
+                  root.setBackgroundColor(Color.parseColor("#0A1F14")); // Premium Dark Islamic Background
+
+                  // 🎤 VIP HEADER PATTI (Zeeshan Husain)
+                  TextView headerBar = new TextView(this);
+                  headerBar.setText("👑 Zeeshan Husain 👑");
+                  headerBar.setBackgroundColor(Color.parseColor("#0F5132")); // Deep Islamic Green
+                  headerBar.setTextColor(Color.parseColor("#FFD700")); // Royal Gold Text
+                  headerBar.setTextSize(22);
+                  headerBar.setTypeface(null, Typeface.BOLD);
+                  headerBar.setGravity(Gravity.CENTER);
+                  headerBar.setPadding(0, 30, 0, 30);
+                  root.addView(headerBar);
+
+                  // Month Navigation Bar (Prev - Month Name - Next)
+                  LinearLayout navBar = new LinearLayout(this);
+                  navBar.setOrientation(LinearLayout.HORIZONTAL);
+                  navBar.setGravity(Gravity.CENTER);
+                  navBar.setPadding(10, 20, 10, 20);
+
+                  Button prevBtn = new Button(this);
+                  prevBtn.setText("◀");
+                  prevBtn.setTextColor(Color.WHITE);
+                  prevBtn.setBackgroundColor(Color.TRANSPARENT);
+                  prevBtn.setOnClickListener(v -> {
+                      currentDisplayDate = currentDisplayDate.minusMonths(1);
+                      renderCalendar();
+                  });
+
+                  monthYearTitle = new TextView(this);
+                  monthYearTitle.setTextColor(Color.WHITE);
+                  monthYearTitle.setTextSize(18);
+                  monthYearTitle.setTypeface(null, Typeface.BOLD);
+                  monthYearTitle.setGravity(Gravity.CENTER);
+                  monthYearTitle.setLayoutParams(new LinearLayout.LayoutParams(0, -2, 1f));
+
+                  Button nextBtn = new Button(this);
+                  nextBtn.setText("▶");
+                  nextBtn.setTextColor(Color.WHITE);
+                  nextBtn.setBackgroundColor(Color.TRANSPARENT);
+                  nextBtn.setOnClickListener(v -> {
+                      currentDisplayDate = currentDisplayDate.plusMonths(1);
+                      renderCalendar();
+                  });
+
+                  navBar.addView(prevBtn);
+                  navBar.addView(monthYearTitle);
+                  navBar.addView(nextBtn);
+                  root.addView(navBar);
+
+                  // Hijri Moon Day Adjuster Button Panel
+                  LinearLayout offsetPanel = new LinearLayout(this);
+                  offsetPanel.setOrientation(LinearLayout.HORIZONTAL);
+                  offsetPanel.setGravity(Gravity.CENTER);
+                  offsetPanel.setPadding(0, 0, 0, 15);
+
+                  Button minusOffset = new Button(this);
+                  minusOffset.setText("🌙 -1 Din");
+                  minusOffset.setOnClickListener(v -> { hijriOffset--; renderCalendar(); });
+
+                  offsetDisplay = new TextView(this);
+                  offsetDisplay.setTextColor(Color.parseColor("#A0AEC0"));
+                  offsetDisplay.setPadding(30, 0, 30, 0);
+
+                  Button plusOffset = new Button(this);
+                  plusOffset.setText("🌙 +1 Din");
+                  plusOffset.setOnClickListener(v -> { hijriOffset++; renderCalendar(); });
+
+                  offsetPanel.addView(minusOffset);
+                  offsetPanel.addView(offsetDisplay);
+                  offsetPanel.addView(plusOffset);
+                  root.addView(offsetPanel);
+
+                  // Weekday Header Row (Itwar to Hafta)
+                  TableLayout weekdayHeader = new TableLayout(this);
+                  TableRow headerRow = new TableRow(this);
+                  String[] days = {"Ahad", "Peer", "Mangal", "Budh", "Jumrat", "Juma", "Hafta"};
+                  for (String day : days) {
+                      TextView tv = new TextView(this);
+                      tv.setText(day);
+                      tv.setTextColor(Color.parseColor("#FFD700"));
+                      tv.setGravity(Gravity.CENTER);
+                      tv.setPadding(0, 10, 0, 10);
+                      headerRow.addView(tv, new TableRow.LayoutParams(0, -2, 1f));
+                  }
+                  weekdayHeader.addView(headerRow);
+                  root.addView(weekdayHeader);
+
+                  // Main 2-in-1 Calendar Grid
+                  calendarGrid = new TableLayout(this);
+                  calendarGrid.setPadding(10, 10, 10, 10);
+                  root.addView(calendarGrid);
+
+                  // Bottom Divider Line
+                  View divider = new View(this);
+                  divider.setLayoutParams(new LinearLayout.LayoutParams(-1, 2));
+                  divider.setBackgroundColor(Color.parseColor("#1B4332"));
+                  root.addView(divider);
+
+                  // Islamic Events List Header
+                  TextView eventHeader = new TextView(this);
+                  eventHeader.setText("📅 Is Mahine Ke Khas Din:");
+                  eventHeader.setTextColor(Color.parseColor("#FFD700"));
+                  eventHeader.setTextSize(16);
+                  eventHeader.setPadding(20, 20, 20, 5);
+                  root.addView(eventHeader);
+
+                  // Scrollable Events View
+                  ScrollView scroll = new ScrollView(this);
+                  eventListView = new TextView(this);
+                  eventListView.setTextColor(Color.WHITE);
+                  eventListView.setTextSize(14);
+                  eventListView.setPadding(20, 10, 20, 20);
+                  scroll.addView(eventListView);
+                  root.addView(scroll);
+
+                  setContentView(root);
+                  renderCalendar();
+              }
+
+              private void renderCalendar() {
+                  calendarGrid.removeAllViews();
+                  offsetDisplay.setText("Chand Adjust: " + (hijriOffset >= 0 ? "+" : "") + hijriOffset);
+
+                  LocalDate firstOfMonth = currentDisplayDate.withDayOfMonth(1);
+                  int totalDays = currentDisplayDate.lengthOfMonth();
+                  int dayOfWeekValue = firstOfMonth.getDayOfWeek().getValue() % 7; // Sunday = 0, Monday = 1...
+
+                  // Set Title Banner text (Gregorian Month + Current Hijri Month Estimation)
+                  HijriDate centerHijri = HijriDate.from(currentDisplayDate.withDayOfMonth(15).plusDays(hijriOffset));
+                  int hMonthIdx = centerHijri.get(java.time.temporal.ChronoField.MONTH_OF_YEAR) - 1;
+                  String hMonthName = (hMonthIdx >= 0 && hMonthIdx < 12) ? hijriMonths[hMonthIdx] : "Islamic";
+                  monthYearTitle.setText(currentDisplayDate.getMonth().name() + " " + currentDisplayDate.getYear() + "\n(" + hMonthName + " " + centerHijri.get(java.time.temporal.ChronoField.YEAR_OF_ERA) + " AH)");
+
+                  TableRow currentGridRow = new TableRow(this);
+
+                  // Initial spacing variables for calendar grid calculation
+                  for (int i = 0; i < dayOfWeekValue; i++) {
+                      TextView emptyView = new TextView(this);
+                      currentGridRow.addView(emptyView, new TableRow.LayoutParams(0, -2, 1f));
+                  }
+
+                  StringBuilder eventsListBuilder = new StringBuilder();
+
+                  for (int day = 1; day <= totalDays; day++) {
+                      LocalDate loopDate = currentDisplayDate.withDayOfMonth(day);
+                      HijriDate hDate = HijriDate.from(loopDate.plusDays(hijriOffset));
+
+                      int hDay = hDate.get(java.time.temporal.ChronoField.DAY_OF_MONTH);
+                      int hMon = hDate.get(java.time.temporal.ChronoField.MONTH_OF_YEAR);
+
+                      // Check for major Islamic Festivals and add to bottom panel tracker
+                      String festival = checkIslamicFestival(hDay, hMon);
+                      if (!festival.isEmpty()) {
+                          eventsListBuilder.append("• ").append(hDay).append(" ").append(hijriMonths[hMon - 1]).append(" -> ").append(festival).append("\n");
+                      }
+
+                      // Create 2-in-1 Compact Box for Calendar Cell
+                      LinearLayout cellBox = new LinearLayout(this);
+                      cellBox.setOrientation(LinearLayout.VERTICAL);
+                      cellBox.setGravity(Gravity.CENTER);
+                      cellBox.setPadding(0, 15, 0, 15);
+
+                      // Draw border for Today's Date highlight
+                      if (loopDate.equals(LocalDate.now())) {
+                          cellBox.setBackgroundColor(Color.parseColor("#1B4332"));
+                      }
+
+                      // English Date Design
+                      TextView engDateText = new TextView(this);
+                      engDateText.setText(String.valueOf(day));
+                      engDateText.setTextColor(Color.WHITE);
+                      engDateText.setTextSize(16);
+                      engDateText.setTypeface(null, Typeface.BOLD);
+                      cellBox.addView(engDateText);
+
+                      // Urdu / Hijri Date Design underneath
+                      TextView urduDateText = new TextView(this);
+                      urduDateText.setText(String.valueOf(hDay));
+                      urduDateText.setTextColor(Color.parseColor("#A0AEC0"));
+                      urduDateText.setTextSize(11);
+                      cellBox.addView(urduDateText);
+
+                      currentGridRow.addView(cellBox, new TableRow.LayoutParams(0, -2, 1f));
+
+                      if ((day + dayOfWeekValue) % 7 == 0 || day == totalDays) {
+                          // Fill up empty boxes in final row if trailing calendar days overflow
+                          if (day == totalDays) {
+                              int trailingEmptyCells = 7 - currentGridRow.getChildCount();
+                              for (int e = 0; e < trailingEmptyCells; e++) {
+                                  TextView emptyView = new TextView(this);
+                                  currentGridRow.addView(emptyView, new TableRow.LayoutParams(0, -2, 1f));
+                              }
+                          }
+                          calendarGrid.addView(currentGridRow);
+                          currentGridRow = new TableRow(this);
+                      }
+                  }
+
+                  if (eventsListBuilder.length() == 0) {
+                      eventListView.setText("Is mahine me koi bada Islami tyohar nahi hai.");
+                  } else {
+                      eventListView.setText(eventsListBuilder.toString());
+                  }
+              }
+
+              // Pre-loaded Islamic calendar dataset highlights
+              private String checkIslamicFestival(int day, int month) {
+                  if (month == 1 && day == 1) return "Naya Islami Saal (1st Muharram)";
+                  if (month == 1 && day == 10) return "Yom-e-Ashura (10th Muharram)";
+                  if (month == 3 && day == 12) return "Eid Milad-un-Nabi (12th Rabi al-Awwal)";
+                  if (month == 7 && day == 27) return "Shab-e-Meraj (27th Rajab)";
+                  if (month == 8 && day == 15) return "Shab-e-Barat (15th Sha'ban)";
+                  if (month == 9 && day == 1) return "Pehla Roza (1st Ramadan)";
+                  if (month == 9 && day == 27) return "Shab-e-Qadr (27th Ramadan)";
+                  if (month == 10 && day == 1) return "Eid-ul-Fitr (1st Shawwal)";
+                  if (month == 12 && day == 10) return "Eid-ul-Adha (10th Dhu al-Hijjah)";
+                  return "";
+              }
+          }
+          EOF
+
+      - name: 7. Write App Manifest Settings
+        run: |
+          cat << 'EOF' > app/src/main/AndroidManifest.xml
+          <?xml version="1.0" encoding="utf-8"?>
+          <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+              package="com.zeeshan.urducalendar">
+              <application
+                  android:allowBackup="true"
+                  android:icon="@drawable/app_icon"
+                  android:label="@string/app_name"
+                  android:roundIcon="@drawable/app_icon"
+                  android:supportsRtl="true"
+                  android:theme="@style/Theme.UrduCalendar">
+                  <activity
+                      android:name=".MainActivity"
+                      android:exported="true">
+                      <intent-filter>
+                          <action android:name="android.intent.action.MAIN" />
+                          <category android:name="android.intent.category.LAUNCHER" />
+                      </intent-filter>
+                  </activity>
+              </application>
+          </manifest>
+          EOF
+
+      - name: 8. Setup Build Automation & Dependencies
+        run: |
+          cat << 'EOF' > build.gradle
+          plugins {
+              id 'com.android.application' version '8.2.0' apply false
+          }
+          EOF
+
+          cat << 'EOF' > gradle.properties
+          android.useAndroidX=true
+          android.enableJetifier=true
+          org.gradle.jvmargs=-Xmx4g
+          EOF
+
+          cat << 'EOF' > settings.gradle
+          pluginManagement {
+              repositories {
+                  google()
+                  mavenCentral()
+                  gradlePluginPortal()
+              }
+          }
+          dependencyResolutionManagement {
+              repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
+              repositories {
+                  google()
+                  mavenCentral()
+              }
+          }
+          include ':app'
+          EOF
+
+          cat << 'EOF' > app/build.gradle
+          plugins {
+              id 'com.android.application'
+          }
+
+          android {
+              namespace 'com.zeeshan.urducalendar'
+              compileSdk 34
+
+              defaultConfig {
+                  applicationId "com.zeeshan.urducalendar"
+                  minSdk 26
+                  targetSdk 34
+                  versionCode 1
+                  versionName "1.0"
+              }
+
+              buildTypes {
+                  release {
+                      minifyEnabled false
+                  }
+              }
+          }
+
+          dependencies {
+              implementation 'androidx.appcompat:appcompat:1.6.1'
+              implementation 'com.google.android.material:material:1.11.0'
+          }
+          EOF
+
+      - name: 9. Compile and Build APK
+        run: |
+          gradle wrapper --gradle-version 8.5
+          chmod +x gradlew
+          ./gradlew assembleDebug
+
+      - name: 10. Upload Final Output Package
+        uses: actions/upload-artifact@v4
+        with:
+          name: Urdu-Calendar-Zeeshan-Husain
+          path: app/build/outputs/apk/debug/*.apk
+
