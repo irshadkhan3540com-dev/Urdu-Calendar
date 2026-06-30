@@ -25,23 +25,63 @@ jobs:
           mkdir -p app/src/main/res/drawable
           mkdir -p app/src/main/res/layout
 
-      - name: 4. Build Code-Driven App Icon (Chand Tara Vector)
+      - name: 4. Build 3D Code-Driven App Icon (Blue Premium Vector)
         run: |
           cat << 'EOF' > app/src/main/res/drawable/app_icon.xml
           <vector xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:aapt="http://schemas.android.com/aapt"
               android:width="512dp"
               android:height="512dp"
               android:viewportWidth="108"
               android:viewportHeight="108">
-              <path
-                  android:fillColor="#0F5132"
-                  android:pathData="M54,54m-50,0a50,50 0,1 1,100 0a50,50 0,1 1,-100 0"/>
-              <path
-                  android:fillColor="#FFD700"
-                  android:pathData="M65,32 C50,32 36,44 36,60 C36,76 50,88 65,88 C56,88 46,80 46,60 C46,40 56,32 65,32 Z"/>
-              <path
-                  android:fillColor="#FFD700"
-                  android:pathData="M66,45 L68,50 L73,50 L69,53 L71,58 L66,55 L61,58 L63,53 L59,50 L64,50 Z"/>
+              
+              <path android:pathData="M 12,8 h 84 q 12,0 12,12 v 68 q 0,12 -12,12 h -84 q -12,0 -12,-12 v -68 q 0,-12 12,-12 z">
+                  <aapt:attr name="android:fillColor">
+                      <gradient
+                          android:startX="54" android:startY="0"
+                          android:endX="54" android:endY="108"
+                          android:type="linear">
+                          <item android:offset="0.0" android:color="#2868A6" />
+                          <item android:offset="0.4" android:color="#144C86" />
+                          <item android:offset="1.0" android:color="#062854" />
+                      </gradient>
+                  </aapt:attr>
+              </path>
+
+              <path android:pathData="M 12,8 h 84 q 12,0 12,12 v 30 q -54,15 -96,0 v -30 q 0,-12 12,-12 z"
+                    android:fillColor="#1AFFFFFF"/>
+
+              <path android:pathData="M 64, 20 C 32, 17 12, 47 22, 77 C 30, 97 47, 104 64, 92 C 37, 90 27, 62 32, 42 C 37, 27 47, 20 64, 20 Z" 
+                    android:fillColor="#40000000"/>
+              <path android:pathData="M 80, 27 L 84, 37 L 95, 37 L 86, 44 L 89, 55 L 80, 48 L 71, 55 L 74, 44 L 65, 37 L 76, 37 Z" 
+                    android:fillColor="#40000000"/>
+
+              <path android:pathData="M 62, 18 C 30, 15 10, 45 20, 75 C 28, 95 45, 102 62, 90 C 35, 88 25, 60 30, 40 C 35, 25 45, 18 62, 18 Z">
+                  <aapt:attr name="android:fillColor">
+                      <gradient
+                          android:startX="20" android:startY="20"
+                          android:endX="62" android:endY="90"
+                          android:type="linear">
+                          <item android:offset="0.0" android:color="#F7D085" />
+                          <item android:offset="0.3" android:color="#C48D4B" />
+                          <item android:offset="0.7" android:color="#875122" />
+                          <item android:offset="1.0" android:color="#593211" />
+                      </gradient>
+                  </aapt:attr>
+              </path>
+
+              <path android:pathData="M 78, 25 L 82, 35 L 93, 35 L 84, 42 L 87, 53 L 78, 46 L 69, 53 L 72, 42 L 63, 35 L 74, 35 Z">
+                  <aapt:attr name="android:fillColor">
+                      <gradient
+                          android:startX="63" android:startY="25"
+                          android:endX="93" android:endY="53"
+                          android:type="linear">
+                          <item android:offset="0.0" android:color="#F7D085" />
+                          <item android:offset="0.5" android:color="#C48D4B" />
+                          <item android:offset="1.0" android:color="#593211" />
+                      </gradient>
+                  </aapt:attr>
+              </path>
           </vector>
           EOF
 
@@ -108,12 +148,11 @@ jobs:
               protected void onCreate(Bundle savedInstanceState) {
                   super.onCreate(savedInstanceState);
 
-                  // Main Layout Background (Light Poster Grey-Blue Background)
                   LinearLayout root = new LinearLayout(this);
                   root.setOrientation(LinearLayout.VERTICAL);
                   root.setBackgroundColor(Color.parseColor("#EBF4F6"));
 
-                  // 👑 ROYAL HEADER BAR (Zeeshan Husain)
+                  // 👑 ROYAL HEADER BAR
                   TextView headerBar = new TextView(this);
                   headerBar.setText("👑 Zeeshan Husain 👑");
                   headerBar.setBackgroundColor(Color.parseColor("#0F5132")); 
@@ -124,7 +163,7 @@ jobs:
                   headerBar.setPadding(0, 35, 0, 35);
                   root.addView(headerBar);
 
-                  // 🕌 POSTER BANNER SECTION (1000028033.jpg Style)
+                  // 🕌 POSTER BANNER SECTION
                   LinearLayout posterBanner = new LinearLayout(this);
                   posterBanner.setOrientation(LinearLayout.VERTICAL);
                   posterBanner.setGravity(Gravity.CENTER);
@@ -183,7 +222,6 @@ jobs:
                   offsetPanel.addView(plusOffset);
                   root.addView(offsetPanel);
 
-                  // SCROLLVIEW TO HOLD ALL 12 MONTH BLOCKS
                   ScrollView mainScrollView = new ScrollView(this);
                   mainScrollContainer = new LinearLayout(this);
                   mainScrollContainer.setOrientation(LinearLayout.VERTICAL);
@@ -199,14 +237,12 @@ jobs:
                   mainScrollContainer.removeAllViews();
                   offsetDisplay.setText("Chand Adjust: " + (hijriOffset >= 0 ? "+" : "") + hijriOffset);
 
-                  // LOOP THROUGH 12 MONTHS FOR THE YEAR 2026
                   for (int m = 1; m <= 12; m++) {
                       mainScrollContainer.addView(createMonthCard(2026, m));
                   }
               }
 
               private View createMonthCard(int year, int month) {
-                  // Outer Card Container
                   LinearLayout card = new LinearLayout(this);
                   card.setOrientation(LinearLayout.VERTICAL);
                   
@@ -220,7 +256,6 @@ jobs:
                   cardBg.setStroke(4, Color.parseColor("#0F5132"));
                   card.setBackground(cardBg);
 
-                  // Fetch Header Details Dynamically
                   LocalDate firstDay = LocalDate.of(year, month, 1);
                   LocalDate midDay = LocalDate.of(year, month, 15);
                   HijrahDate hijriMid = HijrahDate.from(midDay.plusDays(hijriOffset));
@@ -228,7 +263,6 @@ jobs:
                   String hMonthName = (hMonthIdx >= 0 && hMonthIdx < 12) ? hijriMonths[hMonthIdx] : "Islamic";
                   String currentHijriYear = String.valueOf(hijriMid.get(ChronoField.YEAR_OF_ERA));
 
-                  // Month Header Strip (Green/Gold Poster Design)
                   LinearLayout monthHeader = new LinearLayout(this);
                   monthHeader.setOrientation(LinearLayout.HORIZONTAL);
                   monthHeader.setBackgroundColor(Color.parseColor("#0F5132"));
@@ -252,7 +286,6 @@ jobs:
                   monthHeader.addView(urduMonthText);
                   card.addView(monthHeader);
 
-                  // Weekdays Row (Poster Style: Sunday Red, others Dark Green)
                   TableLayout weekdayTable = new TableLayout(this);
                   TableRow weekdayRow = new TableRow(this);
                   weekdayRow.setPadding(0, 15, 0, 15);
@@ -265,7 +298,7 @@ jobs:
                       tv.setGravity(Gravity.CENTER);
                       tv.setTypeface(null, Typeface.BOLD);
                       if (i == 0) {
-                          tv.setTextColor(Color.parseColor("#D32F2F")); // Poster Highlight Sunday
+                          tv.setTextColor(Color.parseColor("#D32F2F")); 
                       } else {
                           tv.setTextColor(Color.parseColor("#0A3622"));
                       }
@@ -274,28 +307,24 @@ jobs:
                   weekdayTable.addView(weekdayRow);
                   card.addView(weekdayTable);
 
-                  // Divider Line
                   View div = new View(this);
                   div.setLayoutParams(new LinearLayout.LayoutParams(-1, 2));
                   div.setBackgroundColor(Color.parseColor("#E2E8F0"));
                   card.addView(div);
 
-                  // Days Grid Table
                   TableLayout daysGrid = new TableLayout(this);
                   daysGrid.setPadding(10, 15, 10, 15);
 
                   int totalDays = firstDay.lengthOfMonth();
-                  int dayOfWeekValue = firstDay.getDayOfWeek().getValue() % 7; // Convert to Sun=0, Mon=1...
+                  int dayOfWeekValue = firstDay.getDayOfWeek().getValue() % 7; 
 
                   TableRow currentRow = new TableRow(this);
 
-                  // Add Empty cells for padding start of month
                   for (int i = 0; i < dayOfWeekValue; i++) {
                       TextView empty = new TextView(this);
                       currentRow.addView(empty, new TableRow.LayoutParams(0, -2, 1f));
                   }
 
-                  // Render Days Loop
                   for (int day = 1; day <= totalDays; day++) {
                       LocalDate loopDate = LocalDate.of(year, month, day);
                       HijrahDate hDate = HijrahDate.from(loopDate.plusDays(hijriOffset));
@@ -303,46 +332,40 @@ jobs:
                       int hDay = hDate.get(ChronoField.DAY_OF_MONTH);
                       int hMon = hDate.get(ChronoField.MONTH_OF_YEAR);
 
-                      // Single Day Container Cell
                       LinearLayout cell = new LinearLayout(this);
                       cell.setOrientation(LinearLayout.VERTICAL);
                       cell.setGravity(Gravity.CENTER);
                       cell.setPadding(5, 12, 5, 12);
 
-                      // Highlight Current Today's Date dynamically
                       if (loopDate.equals(LocalDate.now())) {
                           GradientDrawable todayBg = new GradientDrawable();
-                          todayBg.setColor(Color.parseColor("#FEF08A")); // Soft Gold Highlight
+                          todayBg.setColor(Color.parseColor("#FEF08A")); 
                           todayBg.setCornerRadius(10f);
                           cell.setBackground(todayBg);
                       }
 
-                      // Highlight Important Islamic Festival Background
                       String festivalName = checkIslamicFestival(hDay, hMon);
                       if (!festivalName.isEmpty()) {
                           GradientDrawable festBg = new GradientDrawable();
-                          festBg.setColor(Color.parseColor("#DCFCE7")); // Emerald Light Green
+                          festBg.setColor(Color.parseColor("#DCFCE7")); 
                           festBg.setCornerRadius(10f);
                           festBg.setStroke(2, Color.parseColor("#22C55E"));
                           cell.setBackground(festBg);
                       }
 
-                      // English Date Display
                       TextView engDayTv = new TextView(this);
                       engDayTv.setText(String.valueOf(day));
                       engDayTv.setTextSize(16);
                       engDayTv.setTypeface(null, Typeface.BOLD);
                       
-                      // Check if it is a Sunday
                       int currentColumn = (day + dayOfWeekValue - 1) % 7;
                       if (currentColumn == 0) {
-                          engDayTv.setTextColor(Color.parseColor("#D32F2F")); // Red Sunday Numbers
+                          engDayTv.setTextColor(Color.parseColor("#D32F2F")); 
                       } else {
                           engDayTv.setTextColor(Color.parseColor("#1E293B"));
                       }
                       cell.addView(engDayTv);
 
-                      // Hijri Arabic/Urdu Date Display Below
                       TextView urduDayTv = new TextView(this);
                       urduDayTv.setText(String.valueOf(hDay));
                       urduDayTv.setTextSize(11);
@@ -358,7 +381,6 @@ jobs:
 
                       currentRow.addView(cell, new TableRow.LayoutParams(0, -2, 1f));
 
-                      // Wrap rows every 7 days
                       if ((day + dayOfWeekValue) % 7 == 0 || day == totalDays) {
                           if (day == totalDays) {
                               int trailingEmptyCells = 7 - currentRow.getChildCount();
@@ -373,7 +395,6 @@ jobs:
                   }
                   card.addView(daysGrid);
 
-                  // Month Special Festivals Footer Note (if any)
                   StringBuilder monthFestivals = new StringBuilder();
                   for (int day = 1; day <= totalDays; day++) {
                       LocalDate loopDate = LocalDate.of(year, month, day);
@@ -417,7 +438,6 @@ jobs:
           cat << 'EOF' > app/src/main/AndroidManifest.xml
           <?xml version="1.0" encoding="utf-8"?>
           <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-              <!-- HARDWARE & CPU ACCELERATION ENABLED FOR SMOOTH COLORFUL RENDERING -->
               <application
                   android:allowBackup="true"
                   android:icon="@drawable/app_icon"
