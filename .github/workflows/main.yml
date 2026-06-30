@@ -34,17 +34,14 @@ jobs:
               android:viewportWidth="108"
               android:viewportHeight="108">
               
-              <!-- Islamic Deep Green Round Background -->
               <path
                   android:fillColor="#0F5132"
                   android:pathData="M54,54m-50,0a50,50 0,1 1,100 0a50,50 0,1 1,-100 0"/>
               
-              <!-- Elegant Golden Crescent Moon -->
               <path
                   android:fillColor="#FFD700"
                   android:pathData="M65,32 C50,32 36,44 36,60 C36,76 50,88 65,88 C56,88 46,80 46,60 C46,40 56,32 65,32 Z"/>
               
-              <!-- Golden 5-Pointed Star -->
               <path
                   android:fillColor="#FFD700"
                   android:pathData="M66,45 L68,50 L73,50 L69,53 L71,58 L66,55 L61,58 L63,53 L59,50 L64,50 Z"/>
@@ -90,12 +87,12 @@ jobs:
           import android.widget.*;
           import androidx.appcompat.app.AppCompatActivity;
           import java.time.LocalDate;
-          import java.time.chrono.HijriDate;
-          import java.time.temporal.ChronoUnit;
+          import java.time.chrono.HijrahDate;
+          import java.time.temporal.ChronoField;
           import java.util.Locale;
 
           public class MainActivity extends AppCompatActivity {
-              private int hijriOffset = 0; // Moon Sighting manual adjust karne ke liye (+1 / -1)
+              private int hijriOffset = 0; 
               private LocalDate currentDisplayDate = LocalDate.now();
               
               private TextView monthYearTitle;
@@ -113,23 +110,21 @@ jobs:
               protected void onCreate(Bundle savedInstanceState) {
                   super.onCreate(savedInstanceState);
 
-                  // Main Full Screen Layout
                   LinearLayout root = new LinearLayout(this);
                   root.setOrientation(LinearLayout.VERTICAL);
-                  root.setBackgroundColor(Color.parseColor("#0A1F14")); // Premium Dark Islamic Background
+                  root.setBackgroundColor(Color.parseColor("#0A1F14")); 
 
-                  // 🎤 VIP HEADER PATTI (Zeeshan Husain)
+                  // VIP HEADER PATTI (Zeeshan Husain)
                   TextView headerBar = new TextView(this);
                   headerBar.setText("👑 Zeeshan Husain 👑");
-                  headerBar.setBackgroundColor(Color.parseColor("#0F5132")); // Deep Islamic Green
-                  headerBar.setTextColor(Color.parseColor("#FFD700")); // Royal Gold Text
+                  headerBar.setBackgroundColor(Color.parseColor("#0F5132")); 
+                  headerBar.setTextColor(Color.parseColor("#FFD700")); 
                   headerBar.setTextSize(22);
                   headerBar.setTypeface(null, Typeface.BOLD);
                   headerBar.setGravity(Gravity.CENTER);
                   headerBar.setPadding(0, 30, 0, 30);
                   root.addView(headerBar);
 
-                  // Month Navigation Bar (Prev - Month Name - Next)
                   LinearLayout navBar = new LinearLayout(this);
                   navBar.setOrientation(LinearLayout.HORIZONTAL);
                   navBar.setGravity(Gravity.CENTER);
@@ -165,7 +160,6 @@ jobs:
                   navBar.addView(nextBtn);
                   root.addView(navBar);
 
-                  // Hijri Moon Day Adjuster Button Panel
                   LinearLayout offsetPanel = new LinearLayout(this);
                   offsetPanel.setOrientation(LinearLayout.HORIZONTAL);
                   offsetPanel.setGravity(Gravity.CENTER);
@@ -188,7 +182,6 @@ jobs:
                   offsetPanel.addView(plusOffset);
                   root.addView(offsetPanel);
 
-                  // Weekday Header Row (Itwar to Hafta)
                   TableLayout weekdayHeader = new TableLayout(this);
                   TableRow headerRow = new TableRow(this);
                   String[] days = {"Ahad", "Peer", "Mangal", "Budh", "Jumrat", "Juma", "Hafta"};
@@ -203,18 +196,15 @@ jobs:
                   weekdayHeader.addView(headerRow);
                   root.addView(weekdayHeader);
 
-                  // Main 2-in-1 Calendar Grid
                   calendarGrid = new TableLayout(this);
                   calendarGrid.setPadding(10, 10, 10, 10);
                   root.addView(calendarGrid);
 
-                  // Bottom Divider Line
                   View divider = new View(this);
                   divider.setLayoutParams(new LinearLayout.LayoutParams(-1, 2));
                   divider.setBackgroundColor(Color.parseColor("#1B4332"));
                   root.addView(divider);
 
-                  // Islamic Events List Header
                   TextView eventHeader = new TextView(this);
                   eventHeader.setText("📅 Is Mahine Ke Khas Din:");
                   eventHeader.setTextColor(Color.parseColor("#FFD700"));
@@ -222,7 +212,6 @@ jobs:
                   eventHeader.setPadding(20, 20, 20, 5);
                   root.addView(eventHeader);
 
-                  // Scrollable Events View
                   ScrollView scroll = new ScrollView(this);
                   eventListView = new TextView(this);
                   eventListView.setTextColor(Color.WHITE);
@@ -241,17 +230,16 @@ jobs:
 
                   LocalDate firstOfMonth = currentDisplayDate.withDayOfMonth(1);
                   int totalDays = currentDisplayDate.lengthOfMonth();
-                  int dayOfWeekValue = firstOfMonth.getDayOfWeek().getValue() % 7; // Sunday = 0, Monday = 1...
+                  int dayOfWeekValue = firstOfMonth.getDayOfWeek().getValue() % 7; 
 
-                  // Set Title Banner text (Gregorian Month + Current Hijri Month Estimation)
-                  HijriDate centerHijri = HijriDate.from(currentDisplayDate.withDayOfMonth(15).plusDays(hijriOffset));
-                  int hMonthIdx = centerHijri.get(java.time.temporal.ChronoField.MONTH_OF_YEAR) - 1;
+                  // ERROR FIXED: Changed HijriDate to HijrahDate
+                  HijrahDate centerHijri = HijrahDate.from(currentDisplayDate.withDayOfMonth(15).plusDays(hijriOffset));
+                  int hMonthIdx = centerHijri.get(ChronoField.MONTH_OF_YEAR) - 1;
                   String hMonthName = (hMonthIdx >= 0 && hMonthIdx < 12) ? hijriMonths[hMonthIdx] : "Islamic";
-                  monthYearTitle.setText(currentDisplayDate.getMonth().name() + " " + currentDisplayDate.getYear() + "\n(" + hMonthName + " " + centerHijri.get(java.time.temporal.ChronoField.YEAR_OF_ERA) + " AH)");
+                  monthYearTitle.setText(currentDisplayDate.getMonth().name() + " " + currentDisplayDate.getYear() + "\n(" + hMonthName + " " + centerHijri.get(ChronoField.YEAR_OF_ERA) + " AH)");
 
                   TableRow currentGridRow = new TableRow(this);
 
-                  // Initial spacing variables for calendar grid calculation
                   for (int i = 0; i < dayOfWeekValue; i++) {
                       TextView emptyView = new TextView(this);
                       currentGridRow.addView(emptyView, new TableRow.LayoutParams(0, -2, 1f));
@@ -261,29 +249,26 @@ jobs:
 
                   for (int day = 1; day <= totalDays; day++) {
                       LocalDate loopDate = currentDisplayDate.withDayOfMonth(day);
-                      HijriDate hDate = HijriDate.from(loopDate.plusDays(hijriOffset));
+                      // ERROR FIXED: Changed HijriDate to HijrahDate
+                      HijrahDate hDate = HijrahDate.from(loopDate.plusDays(hijriOffset));
 
-                      int hDay = hDate.get(java.time.temporal.ChronoField.DAY_OF_MONTH);
-                      int hMon = hDate.get(java.time.temporal.ChronoField.MONTH_OF_YEAR);
+                      int hDay = hDate.get(ChronoField.DAY_OF_MONTH);
+                      int hMon = hDate.get(ChronoField.MONTH_OF_YEAR);
 
-                      // Check for major Islamic Festivals and add to bottom panel tracker
                       String festival = checkIslamicFestival(hDay, hMon);
                       if (!festival.isEmpty()) {
                           eventsListBuilder.append("• ").append(hDay).append(" ").append(hijriMonths[hMon - 1]).append(" -> ").append(festival).append("\n");
                       }
 
-                      // Create 2-in-1 Compact Box for Calendar Cell
                       LinearLayout cellBox = new LinearLayout(this);
                       cellBox.setOrientation(LinearLayout.VERTICAL);
                       cellBox.setGravity(Gravity.CENTER);
                       cellBox.setPadding(0, 15, 0, 15);
 
-                      // Draw border for Today's Date highlight
                       if (loopDate.equals(LocalDate.now())) {
                           cellBox.setBackgroundColor(Color.parseColor("#1B4332"));
                       }
 
-                      // English Date Design
                       TextView engDateText = new TextView(this);
                       engDateText.setText(String.valueOf(day));
                       engDateText.setTextColor(Color.WHITE);
@@ -291,7 +276,6 @@ jobs:
                       engDateText.setTypeface(null, Typeface.BOLD);
                       cellBox.addView(engDateText);
 
-                      // Urdu / Hijri Date Design underneath
                       TextView urduDateText = new TextView(this);
                       urduDateText.setText(String.valueOf(hDay));
                       urduDateText.setTextColor(Color.parseColor("#A0AEC0"));
@@ -301,7 +285,6 @@ jobs:
                       currentGridRow.addView(cellBox, new TableRow.LayoutParams(0, -2, 1f));
 
                       if ((day + dayOfWeekValue) % 7 == 0 || day == totalDays) {
-                          // Fill up empty boxes in final row if trailing calendar days overflow
                           if (day == totalDays) {
                               int trailingEmptyCells = 7 - currentGridRow.getChildCount();
                               for (int e = 0; e < trailingEmptyCells; e++) {
@@ -321,7 +304,6 @@ jobs:
                   }
               }
 
-              // Pre-loaded Islamic calendar dataset highlights
               private String checkIslamicFestival(int day, int month) {
                   if (month == 1 && day == 1) return "Naya Islami Saal (1st Muharram)";
                   if (month == 1 && day == 10) return "Yom-e-Ashura (10th Muharram)";
@@ -341,8 +323,8 @@ jobs:
         run: |
           cat << 'EOF' > app/src/main/AndroidManifest.xml
           <?xml version="1.0" encoding="utf-8"?>
-          <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-              package="com.zeeshan.urducalendar">
+          <!-- ERROR FIXED: Removed package="" attribute from manifest -->
+          <manifest xmlns:android="http://schemas.android.com/apk/res/android">
               <application
                   android:allowBackup="true"
                   android:icon="@drawable/app_icon"
