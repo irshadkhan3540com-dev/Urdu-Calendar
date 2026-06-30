@@ -88,8 +88,9 @@ jobs:
       - name: 5. Write Strings, Colors & All 3D / Neumorphism Drawables
         run: |
           cat << 'EOF' > app/src/main/res/values/strings.xml
+          <?xml version="1.0" encoding="utf-8"?>
           <resources>
-              <string name="app_name">Ø§Ø±Ø¯Ùˆ Ú©ÛŒÙ„Ù†ÚˆØ± 2026</string>
+              <string name="app_name">&#x0627;&#x0631;&#x062F;&#x0648; &#x06A9;&#x06CC;&#x0644;&#x0646;&#x0688;&#x0631; 2026</string>
           </resources>
           EOF
 
@@ -247,9 +248,11 @@ jobs:
                   "July", "August", "September", "October", "November", "December"
               };
 
+              // Urdu month names (ASCII-safe unicode escapes - never gets corrupted by copy/paste)
               private final String[] urduMonths = {
-                  "Ø¬Ù†ÙˆØ±ÛŒ", "ÙØ±ÙˆØ±ÛŒ", "Ù…Ø§Ø±Ú†", "Ø§Ù¾Ø±ÛŒÙ„", "Ù…Ø¦ÛŒ", "Ø¬ÙˆÙ†",
-                  "Ø¬ÙˆÙ„Ø§Ø¦ÛŒ", "Ø§Ú¯Ø³Øª", "Ø³ØªÙ…Ø¨Ø±", "Ø§Ú©ØªÙˆØ¨Ø±", "Ù†ÙˆÙ…Ø¨Ø±", "Ø¯Ø³Ù…Ø¨Ø±"
+                  "\u062C\u0646\u0648\u0631\u06CC", "\u0641\u0631\u0648\u0631\u06CC", "\u0645\u0627\u0631\u0686", "\u0627\u067E\u0631\u06CC\u0644",
+                  "\u0645\u0626\u06CC", "\u062C\u0648\u0646", "\u062C\u0648\u0644\u0627\u0626\u06CC", "\u0627\u06AF\u0633\u062A",
+                  "\u0633\u062A\u0645\u0628\u0631", "\u0627\u06A9\u062A\u0648\u0628\u0631", "\u0646\u0648\u0645\u0628\u0631", "\u062F\u0633\u0645\u0628\u0631"
               };
 
               private final String[] hijriMonthsEnglish = {
@@ -259,15 +262,21 @@ jobs:
               };
 
               private final String[] hijriMonthsUrdu = {
-                  "Ù…Ø­Ø±Ù…", "ØµÙØ±", "Ø±Ø¨ÛŒØ¹ Ø§Ù„Ø§ÙˆÙ„", "Ø±Ø¨ÛŒØ¹ Ø§Ù„Ø«Ø§Ù†ÛŒ",
-                  "Ø¬Ù…Ø§Ø¯ÛŒ Ø§Ù„Ø§ÙˆÙ„", "Ø¬Ù…Ø§Ø¯ÛŒ Ø§Ù„Ø«Ø§Ù†ÛŒ", "Ø±Ø¬Ø¨", "Ø´Ø¹Ø¨Ø§Ù†",
-                  "Ø±Ù…Ø¶Ø§Ù†", "Ø´ÙˆØ§Ù„", "Ø°ÙˆØ§Ù„Ù‚Ø¹Ø¯Û", "Ø°ÙˆØ§Ù„Ø­Ø¬Û"
+                  "\u0645\u062D\u0631\u0645", "\u0635\u0641\u0631", "\u0631\u0628\u06CC\u0639 \u0627\u0644\u0627\u0648\u0644", "\u0631\u0628\u06CC\u0639 \u0627\u0644\u062B\u0627\u0646\u06CC",
+                  "\u062C\u0645\u0627\u062F\u06CC \u0627\u0644\u0627\u0648\u0644", "\u062C\u0645\u0627\u062F\u06CC \u0627\u0644\u062B\u0627\u0646\u06CC", "\u0631\u062C\u0628", "\u0634\u0639\u0628\u0627\u0646",
+                  "\u0631\u0645\u0636\u0627\u0646", "\u0634\u0648\u0627\u0644", "\u0630\u0648\u0627\u0644\u0642\u0639\u062F\u06C1", "\u0630\u0648\u0627\u0644\u062D\u062C\u06C1"
               };
 
               // index 0 = Sunday ... 6 = Saturday
               private final String[] dayCodeEnglish = {"SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"};
-              private final String[] dayNameUrdu     = {"Ø§ØªÙˆØ§Ø±", "Ù¾ÛŒØ±", "Ù…Ù†Ú¯Ù„", "Ø¨Ø¯Ú¾", "Ø¬Ù…Ø¹Ø±Ø§Øª", "Ø¬Ù…Ø¹Û", "Ø³Ù†ÛŒÚ†Ø±"};
-              private final String[] dayNameHindi    = {"à¤°à¤µà¤¿à¤µà¤¾à¤°", "à¤¸à¥‹à¤®à¤µà¤¾à¤°", "à¤®à¤‚à¤—à¤²à¤µà¤¾à¤°", "à¤¬à¥à¤§à¤µà¤¾à¤°", "à¤—à¥à¤°à¥à¤µà¤¾à¤°", "à¤¶à¥à¤•à¥à¤°à¤µà¤¾à¤°", "à¤¶à¤¨à¤¿à¤µà¤¾à¤°"};
+              private final String[] dayNameUrdu = {
+                  "\u0627\u062A\u0648\u0627\u0631", "\u067E\u06CC\u0631", "\u0645\u0646\u06AF\u0644", "\u0628\u062F\u06BE",
+                  "\u062C\u0645\u0639\u0631\u0627\u062A", "\u062C\u0645\u0639\u06C1", "\u0633\u0646\u06CC\u0686\u0631"
+              };
+              private final String[] dayNameHindi = {
+                  "\u0930\u0935\u093F\u0935\u093E\u0930", "\u0938\u094B\u092E\u0935\u093E\u0930", "\u092E\u0902\u0917\u0932\u0935\u093E\u0930", "\u092C\u0941\u0927\u0935\u093E\u0930",
+                  "\u0917\u0941\u0930\u0941\u0935\u093E\u0930", "\u0936\u0941\u0915\u094D\u0930\u0935\u093E\u0930", "\u0936\u0928\u093F\u0935\u093E\u0930"
+              };
 
               @Override
               protected void onCreate(Bundle savedInstanceState) {
@@ -316,7 +325,7 @@ jobs:
                   bar.setElevation(dp(8));
 
                   TextView title = new TextView(this);
-                  title.setText("Ø§Ø±Ø¯Ùˆ Ú©ÛŒÙ„Ù†ÚˆØ± 2026");
+                  title.setText("\u0627\u0631\u062F\u0648 \u06A9\u06CC\u0644\u0646\u0688\u0631 2026");
                   title.setTextColor(Color.WHITE);
                   title.setTextSize(20);
                   title.setTypeface(null, Typeface.BOLD);
@@ -391,7 +400,7 @@ jobs:
                   outer.addView(row);
 
                   TextView subtitle = new TextView(this);
-                  subtitle.setText("Hijri Date Start From Jan 2026  â€¢  Use arrows to change month");
+                  subtitle.setText("Hijri Date Start From Jan 2026  -  Use arrows to change month");
                   subtitle.setTextColor(Color.parseColor("#0F5132"));
                   subtitle.setTextSize(11);
                   subtitle.setGravity(Gravity.CENTER);
@@ -427,7 +436,7 @@ jobs:
                   banner.setElevation(dp(6));
 
                   TextView daysTag = new TextView(this);
-                  daysTag.setText("DAYS\nØ§ÛŒØ§Ù…\nà¤¦à¤¿à¤¨");
+                  daysTag.setText("DAYS\n\u0627\u06CC\u0627\u0645\n\u0926\u093F\u0928");
                   daysTag.setTextColor(Color.WHITE);
                   daysTag.setTextSize(11);
                   daysTag.setTypeface(null, Typeface.BOLD);
@@ -504,10 +513,10 @@ jobs:
                   monthEnglishText.setText(englishMonths[currentMonthIndex]);
                   monthUrduText.setText(urduMonths[currentMonthIndex] + "  " + YEAR);
                   hijriStartDayText.setText(String.valueOf(hijriFirst.get(ChronoField.DAY_OF_MONTH)));
-                  hijriYearBadgeText.setText((hMonthIdxFirst >= 0 ? hijriMonthsUrdu[hMonthIdxFirst] : "") + "\n" + hYearFirst + "Ú¾");
+                  hijriYearBadgeText.setText((hMonthIdxFirst >= 0 ? hijriMonthsUrdu[hMonthIdxFirst] : "") + "\n" + hYearFirst + "\u06BE");
 
                   // For every weekday (Sun..Sat) build one horizontal row containing
-                  // every date in this month that falls on that weekday â€” exactly the
+                  // every date in this month that falls on that weekday - exactly the
                   // layout style used in the reference calendar image.
                   for (int weekday = 0; weekday < 7; weekday++) {
                       calendarGrid.addView(buildWeekdayRow(weekday, firstDay, totalDays));
