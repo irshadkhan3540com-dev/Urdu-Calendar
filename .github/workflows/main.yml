@@ -112,35 +112,30 @@ jobs:
           </resources>
           EOF
 
-          # Top app title bar - deep indigo glossy gradient (3D glossy strip)
           cat << 'EOF' > app/src/main/res/drawable/title_bar_gradient_bg.xml
           <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
               <gradient android:angle="90" android:startColor="#3949AB" android:centerColor="#283593" android:endColor="#1A237E" android:type="linear"/>
           </shape>
           EOF
 
-          # Date navigation bar - lighter blue glossy strip beneath title
           cat << 'EOF' > app/src/main/res/drawable/date_nav_gradient_bg.xml
           <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
               <gradient android:angle="90" android:startColor="#FFFFFF" android:centerColor="#F3F6FF" android:endColor="#E8ECFB" android:type="linear"/>
           </shape>
           EOF
 
-          # Month/Year banner row - royal blue 3D embossed strip
           cat << 'EOF' > app/src/main/res/drawable/month_banner_gradient_bg.xml
           <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
               <gradient android:angle="90" android:startColor="#2E4FA8" android:centerColor="#1E3B82" android:endColor="#13265A" android:type="linear"/>
           </shape>
           EOF
 
-          # DAYS header tag - solid royal blue 3D box
           cat << 'EOF' > app/src/main/res/drawable/days_tag_gradient_bg.xml
           <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
               <gradient android:angle="135" android:startColor="#3B5FCB" android:centerColor="#22408F" android:endColor="#13265A" android:type="linear"/>
           </shape>
           EOF
 
-          # Round red 3D badge behind the Hijri start-day number in the month banner
           cat << 'EOF' > app/src/main/res/drawable/circle_badge_bg.xml
           <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="oval">
               <gradient android:angle="135" android:startColor="#FF6659" android:centerColor="#E53935" android:endColor="#8E0000" android:type="linear"/>
@@ -148,28 +143,24 @@ jobs:
           </shape>
           EOF
 
-          # Sunday weekday row - glossy red 3D
           cat << 'EOF' > app/src/main/res/drawable/row_sun_bg.xml
           <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
               <gradient android:angle="90" android:startColor="#E53935" android:centerColor="#C62828" android:endColor="#8E0000" android:type="linear"/>
           </shape>
           EOF
 
-          # Friday weekday row - glossy green 3D
           cat << 'EOF' > app/src/main/res/drawable/row_fri_bg.xml
           <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
               <gradient android:angle="90" android:startColor="#2E7D4F" android:centerColor="#0F5132" android:endColor="#06321D" android:type="linear"/>
           </shape>
           EOF
 
-          # Mon/Tue/Wed/Thu/Sat weekday rows - glossy black 3D
           cat << 'EOF' > app/src/main/res/drawable/row_dark_bg.xml
           <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
               <gradient android:angle="90" android:startColor="#4A4A4A" android:centerColor="#222222" android:endColor="#000000" android:type="linear"/>
           </shape>
           EOF
 
-          # Plain date cell - soft white 3D raised tile
           cat << 'EOF' > app/src/main/res/drawable/date_cell_bg.xml
           <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
               <gradient android:angle="135" android:startColor="#FFFFFF" android:centerColor="#F6F8FC" android:endColor="#E7EBF5" android:type="linear"/>
@@ -178,7 +169,6 @@ jobs:
           </shape>
           EOF
 
-          # Today date cell - golden raised 3D tile
           cat << 'EOF' > app/src/main/res/drawable/date_cell_today_bg.xml
           <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
               <gradient android:angle="135" android:startColor="#FFF6C8" android:centerColor="#FEE585" android:endColor="#F5C342" android:type="linear"/>
@@ -187,7 +177,6 @@ jobs:
           </shape>
           EOF
 
-          # Festival date cell - emerald raised 3D tile
           cat << 'EOF' > app/src/main/res/drawable/date_cell_festival_bg.xml
           <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
               <gradient android:angle="135" android:startColor="#EAFBF1" android:centerColor="#BFEFD3" android:endColor="#7FD9A3" android:type="linear"/>
@@ -196,7 +185,6 @@ jobs:
           </shape>
           EOF
 
-          # Round nav arrow button - 3D circular chip
           cat << 'EOF' > app/src/main/res/drawable/nav_arrow_bg.xml
           <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="oval">
               <gradient android:angle="135" android:startColor="#FFFFFF" android:centerColor="#EAEFFA" android:endColor="#C9D4EE" android:type="linear"/>
@@ -204,7 +192,6 @@ jobs:
           </shape>
           EOF
 
-          # Whole calendar grid card - soft 3D panel
           cat << 'EOF' > app/src/main/res/drawable/grid_panel_bg.xml
           <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
               <gradient android:angle="135" android:startColor="#FFFFFF" android:centerColor="#F7F9FD" android:endColor="#EDF1FA" android:type="linear"/>
@@ -221,6 +208,7 @@ jobs:
           import android.graphics.Color;
           import android.graphics.Typeface;
           import android.os.Bundle;
+          import android.os.Handler;
           import android.util.TypedValue;
           import android.view.Gravity;
           import android.view.View;
@@ -229,36 +217,35 @@ jobs:
           import androidx.cardview.widget.CardView;
           import java.time.DayOfWeek;
           import java.time.LocalDate;
+          import java.time.LocalTime;
           import java.time.chrono.HijrahDate;
+          import java.time.format.DateTimeFormatter;
           import java.time.format.TextStyle;
           import java.time.temporal.ChronoField;
           import java.util.Locale;
 
           public class MainActivity extends AppCompatActivity {
 
-              private int currentMonthIndex = 0; // 0 = January 2026
+              private int currentMonthIndex = 0; 
               private final int YEAR = 2026;
               private int hijriOffset = 0;
 
               private LinearLayout calendarGrid;
               private TextView monthEnglishText, monthUrduText, hijriYearBadgeText, hijriStartDayText;
+              
+              // Live Clock Variables
+              private TextView liveTimeText, liveSystemDateText;
+              private final Handler handler = new Handler();
 
               private final String[] englishMonths = {
                   "January", "February", "March", "April", "May", "June",
                   "July", "August", "September", "October", "November", "December"
               };
 
-              // Urdu month names (ASCII-safe unicode escapes - never gets corrupted by copy/paste)
               private final String[] urduMonths = {
                   "\u062C\u0646\u0648\u0631\u06CC", "\u0641\u0631\u0648\u0631\u06CC", "\u0645\u0627\u0631\u0686", "\u0627\u067E\u0631\u06CC\u0644",
                   "\u0645\u0626\u06CC", "\u062C\u0648\u0646", "\u062C\u0648\u0644\u0627\u0626\u06CC", "\u0627\u06AF\u0633\u062A",
                   "\u0633\u062A\u0645\u0628\u0631", "\u0627\u06A9\u062A\u0648\u0628\u0631", "\u0646\u0648\u0645\u0628\u0631", "\u062F\u0633\u0645\u0628\u0631"
-              };
-
-              private final String[] hijriMonthsEnglish = {
-                  "Muharram", "Safar", "Rabi al-Awwal", "Rabi al-Thani",
-                  "Jumada al-Awwal", "Jumada al-Thani", "Rajab", "Shaban",
-                  "Ramadan", "Shawwal", "Dhu al-Qadah", "Dhu al-Hijjah"
               };
 
               private final String[] hijriMonthsUrdu = {
@@ -267,7 +254,6 @@ jobs:
                   "\u0631\u0645\u0636\u0627\u0646", "\u0634\u0648\u0627\u0644", "\u0630\u0648\u0627\u0644\u0642\u0639\u062F\u06C1", "\u0630\u0648\u0627\u0644\u062D\u062C\u06C1"
               };
 
-              // index 0 = Sunday ... 6 = Saturday
               private final String[] dayCodeEnglish = {"SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"};
               private final String[] dayNameUrdu = {
                   "\u0627\u062A\u0648\u0627\u0631", "\u067E\u06CC\u0631", "\u0645\u0646\u06AF\u0644", "\u0628\u062F\u06BE",
@@ -286,6 +272,43 @@ jobs:
                   root.setOrientation(LinearLayout.VERTICAL);
                   root.setBackgroundColor(Color.parseColor("#DDE3F0"));
 
+                  // 1. Zeeshan Husain Banner
+                  TextView zeeshanBanner = new TextView(this);
+                  zeeshanBanner.setText("Zeeshan Husain");
+                  zeeshanBanner.setBackgroundColor(Color.parseColor("#062854"));
+                  zeeshanBanner.setTextColor(Color.WHITE);
+                  zeeshanBanner.setGravity(Gravity.CENTER);
+                  zeeshanBanner.setPadding(0, dp(12), 0, dp(12));
+                  zeeshanBanner.setTextSize(22);
+                  zeeshanBanner.setTypeface(null, Typeface.BOLD);
+                  root.addView(zeeshanBanner);
+
+                  // 2. Live System Clock & Date Bar
+                  LinearLayout clockBar = new LinearLayout(this);
+                  clockBar.setOrientation(LinearLayout.VERTICAL);
+                  clockBar.setBackgroundColor(Color.parseColor("#1A237E"));
+                  clockBar.setPadding(0, dp(10), 0, dp(10));
+                  clockBar.setGravity(Gravity.CENTER);
+
+                  liveTimeText = new TextView(this);
+                  liveTimeText.setTextColor(Color.parseColor("#FFD700"));
+                  liveTimeText.setTextSize(28);
+                  liveTimeText.setTypeface(null, Typeface.BOLD);
+                  liveTimeText.setGravity(Gravity.CENTER);
+                  clockBar.addView(liveTimeText);
+
+                  liveSystemDateText = new TextView(this);
+                  liveSystemDateText.setTextColor(Color.WHITE);
+                  liveSystemDateText.setTextSize(14);
+                  liveSystemDateText.setGravity(Gravity.CENTER);
+                  clockBar.addView(liveSystemDateText);
+
+                  root.addView(clockBar);
+
+                  // 3. Start Live Engine
+                  startLiveClock();
+
+                  // 4. Continue Normal UI Layout
                   root.addView(buildTitleBar());
                   root.addView(buildDateInfoBar());
                   root.addView(buildMonthBanner());
@@ -315,7 +338,19 @@ jobs:
                   renderMonth();
               }
 
-              // ===================== TOP TITLE BAR =====================
+              private void startLiveClock() {
+                  handler.post(new Runnable() {
+                      @Override
+                      public void run() {
+                          String time = LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm:ss a"));
+                          String date = LocalDate.now().format(DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy"));
+                          liveTimeText.setText(time);
+                          liveSystemDateText.setText(date);
+                          handler.postDelayed(this, 1000); // 1 second update loop
+                      }
+                  });
+              }
+
               private View buildTitleBar() {
                   LinearLayout bar = new LinearLayout(this);
                   bar.setOrientation(LinearLayout.HORIZONTAL);
@@ -341,24 +376,14 @@ jobs:
                   shareBtn.setOnClickListener(v -> {
                       Intent shareIntent = new Intent(Intent.ACTION_SEND);
                       shareIntent.setType("text/plain");
-                      shareIntent.putExtra(Intent.EXTRA_TEXT, "Urdu Calendar 2026 - " + englishMonths[currentMonthIndex] + " " + YEAR);
+                      shareIntent.putExtra(Intent.EXTRA_TEXT, "Urdu Calendar 2026");
                       startActivity(Intent.createChooser(shareIntent, "Share via"));
                   });
                   bar.addView(shareBtn);
 
-                  TextView exitBtn = new TextView(this);
-                  exitBtn.setText("EXIT");
-                  exitBtn.setTextColor(Color.parseColor("#FFD700"));
-                  exitBtn.setTextSize(13);
-                  exitBtn.setTypeface(null, Typeface.BOLD);
-                  exitBtn.setPadding(dp(14), dp(6), dp(0), dp(6));
-                  exitBtn.setOnClickListener(v -> finish());
-                  bar.addView(exitBtn);
-
                   return bar;
               }
 
-              // ===================== TODAY DATE INFO BAR =====================
               private View buildDateInfoBar() {
                   LinearLayout outer = new LinearLayout(this);
                   outer.setOrientation(LinearLayout.VERTICAL);
@@ -382,7 +407,7 @@ jobs:
                   row.addView(leftArrow);
 
                   TextView dateText = new TextView(this);
-                  dateText.setText(today.getDayOfMonth() + " " + engMonShort + " " + today.getYear() + "   " + engDow);
+                  dateText.setText("Selected Year: 2026");
                   dateText.setTextColor(Color.parseColor("#13265A"));
                   dateText.setTextSize(15);
                   dateText.setTypeface(null, Typeface.BOLD);
@@ -398,16 +423,6 @@ jobs:
                   row.addView(rightArrow);
 
                   outer.addView(row);
-
-                  TextView subtitle = new TextView(this);
-                  subtitle.setText("Hijri Date Start From Jan 2026  -  Use arrows to change month");
-                  subtitle.setTextColor(Color.parseColor("#0F5132"));
-                  subtitle.setTextSize(11);
-                  subtitle.setGravity(Gravity.CENTER);
-                  subtitle.setTypeface(null, Typeface.BOLD);
-                  subtitle.setPadding(0, dp(6), 0, 0);
-                  outer.addView(subtitle);
-
                   return outer;
               }
 
@@ -426,7 +441,6 @@ jobs:
                   return arrow;
               }
 
-              // ===================== MONTH / YEAR BANNER =====================
               private View buildMonthBanner() {
                   LinearLayout banner = new LinearLayout(this);
                   banner.setOrientation(LinearLayout.HORIZONTAL);
@@ -498,14 +512,11 @@ jobs:
                   return banner;
               }
 
-              // ===================== RENDER CURRENT MONTH GRID =====================
               private void renderMonth() {
                   calendarGrid.removeAllViews();
-
                   int month = currentMonthIndex + 1;
                   LocalDate firstDay = LocalDate.of(YEAR, month, 1);
                   int totalDays = firstDay.lengthOfMonth();
-
                   HijrahDate hijriFirst = HijrahDate.from(firstDay.plusDays(hijriOffset));
                   int hMonthIdxFirst = hijriFirst.get(ChronoField.MONTH_OF_YEAR) - 1;
                   String hYearFirst = String.valueOf(hijriFirst.get(ChronoField.YEAR_OF_ERA));
@@ -515,9 +526,6 @@ jobs:
                   hijriStartDayText.setText(String.valueOf(hijriFirst.get(ChronoField.DAY_OF_MONTH)));
                   hijriYearBadgeText.setText((hMonthIdxFirst >= 0 ? hijriMonthsUrdu[hMonthIdxFirst] : "") + "\n" + hYearFirst + "\u06BE");
 
-                  // For every weekday (Sun..Sat) build one horizontal row containing
-                  // every date in this month that falls on that weekday - exactly the
-                  // layout style used in the reference calendar image.
                   for (int weekday = 0; weekday < 7; weekday++) {
                       calendarGrid.addView(buildWeekdayRow(weekday, firstDay, totalDays));
                       if (weekday < 6) {
@@ -535,7 +543,6 @@ jobs:
                   row.setGravity(Gravity.CENTER_VERTICAL);
                   row.setPadding(dp(6), dp(6), dp(6), dp(6));
 
-                  // Day-name header tag (colored exactly like the reference: Sun=red, Fri=green, rest=black)
                   TextView dayTag = new TextView(this);
                   dayTag.setText(dayCodeEnglish[weekday] + "\n" + dayNameUrdu[weekday] + "\n" + dayNameHindi[weekday]);
                   dayTag.setTextColor(Color.WHITE);
@@ -561,10 +568,9 @@ jobs:
                   LinearLayout cellsRow = new LinearLayout(this);
                   cellsRow.setOrientation(LinearLayout.HORIZONTAL);
 
-                  // DayOfWeek.getValue(): Mon=1..Sun=7. Our index uses Sun=0..Sat=6.
                   for (int day = 1; day <= totalDays; day++) {
                       LocalDate loopDate = LocalDate.of(firstDay.getYear(), firstDay.getMonthValue(), day);
-                      int isoVal = loopDate.getDayOfWeek().getValue() % 7; // Sun=0..Sat=6
+                      int isoVal = loopDate.getDayOfWeek().getValue() % 7;
                       if (isoVal != weekday) continue;
                       cellsRow.addView(buildDateCell(loopDate));
                   }
