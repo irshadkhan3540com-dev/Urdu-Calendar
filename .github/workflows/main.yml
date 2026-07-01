@@ -34,34 +34,21 @@ jobs:
               android:height="512dp"
               android:viewportWidth="108"
               android:viewportHeight="108">
-
               <path android:pathData="M 12,8 h 84 q 12,0 12,12 v 68 q 0,12 -12,12 h -84 q -12,0 -12,-12 v -68 q 0,-12 12,-12 z">
                   <aapt:attr name="android:fillColor">
-                      <gradient
-                          android:startX="54" android:startY="0"
-                          android:endX="54" android:endY="108"
-                          android:type="linear">
+                      <gradient android:startX="54" android:startY="0" android:endX="54" android:endY="108" android:type="linear">
                           <item android:offset="0.0" android:color="#2868A6" />
                           <item android:offset="0.4" android:color="#144C86" />
                           <item android:offset="1.0" android:color="#062854" />
                       </gradient>
                   </aapt:attr>
               </path>
-
-              <path android:pathData="M 12,8 h 84 q 12,0 12,12 v 30 q -54,15 -96,0 v -30 q 0,-12 12,-12 z"
-                    android:fillColor="#1AFFFFFF"/>
-
-              <path android:pathData="M 64, 20 C 32, 17 12, 47 22, 77 C 30, 97 47, 104 64, 92 C 37, 90 27, 62 32, 42 C 37, 27 47, 20 64, 20 Z"
-                    android:fillColor="#40000000"/>
-              <path android:pathData="M 80, 27 L 84, 37 L 95, 37 L 86, 44 L 89, 55 L 80, 48 L 71, 55 L 74, 44 L 65, 37 L 76, 37 Z"
-                    android:fillColor="#40000000"/>
-
+              <path android:pathData="M 12,8 h 84 q 12,0 12,12 v 30 q -54,15 -96,0 v -30 q 0,-12 12,-12 z" android:fillColor="#1AFFFFFF"/>
+              <path android:pathData="M 64, 20 C 32, 17 12, 47 22, 77 C 30, 97 47, 104 64, 92 C 37, 90 27, 62 32, 42 C 37, 27 47, 20 64, 20 Z" android:fillColor="#40000000"/>
+              <path android:pathData="M 80, 27 L 84, 37 L 95, 37 L 86, 44 L 89, 55 L 80, 48 L 71, 55 L 74, 44 L 65, 37 L 76, 37 Z" android:fillColor="#40000000"/>
               <path android:pathData="M 62, 18 C 30, 15 10, 45 20, 75 C 28, 95 45, 102 62, 90 C 35, 88 25, 60 30, 40 C 35, 25 45, 18 62, 18 Z">
                   <aapt:attr name="android:fillColor">
-                      <gradient
-                          android:startX="20" android:startY="20"
-                          android:endX="62" android:endY="90"
-                          android:type="linear">
+                      <gradient android:startX="20" android:startY="20" android:endX="62" android:endY="90" android:type="linear">
                           <item android:offset="0.0" android:color="#F7D085" />
                           <item android:offset="0.3" android:color="#C48D4B" />
                           <item android:offset="0.7" android:color="#875122" />
@@ -69,13 +56,9 @@ jobs:
                       </gradient>
                   </aapt:attr>
               </path>
-
               <path android:pathData="M 78, 25 L 82, 35 L 93, 35 L 84, 42 L 87, 53 L 78, 46 L 69, 53 L 72, 42 L 63, 35 L 74, 35 Z">
                   <aapt:attr name="android:fillColor">
-                      <gradient
-                          android:startX="63" android:startY="25"
-                          android:endX="93" android:endY="53"
-                          android:type="linear">
+                      <gradient android:startX="63" android:startY="25" android:endX="93" android:endY="53" android:type="linear">
                           <item android:offset="0.0" android:color="#F7D085" />
                           <item android:offset="0.5" android:color="#C48D4B" />
                           <item android:offset="1.0" android:color="#593211" />
@@ -90,7 +73,7 @@ jobs:
           cat << 'EOF' > app/src/main/res/values/strings.xml
           <?xml version="1.0" encoding="utf-8"?>
           <resources>
-              <string name="app_name">&#x0627;&#x0631;&#x062F;&#x0648; &#x06A9;&#x06CC;&#x0644;&#x0646;&#x0688;&#x0631; 2026</string>
+              <string name="app_name">&#x0627;&#x0631;&#x062F;&#x0648; &#x06A9;&#x06CC;&#x0644;&#x0646;&#x0688;&#x0631;</string>
           </resources>
           EOF
 
@@ -171,9 +154,10 @@ jobs:
 
           cat << 'EOF' > app/src/main/res/drawable/date_cell_today_bg.xml
           <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
-              <gradient android:angle="135" android:startColor="#FFF6C8" android:centerColor="#FEE585" android:endColor="#F5C342" android:type="linear"/>
+              <!-- RED COLOR FOR TODAY -->
+              <gradient android:angle="135" android:startColor="#FFEBEE" android:centerColor="#FFCDD2" android:endColor="#EF5350" android:type="linear"/>
               <corners android:radius="10dp"/>
-              <stroke android:width="1dp" android:color="#D49A1F"/>
+              <stroke android:width="2dp" android:color="#D32F2F"/>
           </shape>
           EOF
 
@@ -199,7 +183,7 @@ jobs:
           </shape>
           EOF
 
-      - name: 6. Write Full Premium Single-Month 3D Calendar App (UI + Logic)
+      - name: 6. Write Full Premium Single-Month Auto-Engine App
         run: |
           cat << 'EOF' > app/src/main/java/com/zeeshan/urducalendar/MainActivity.java
           package com.zeeshan.urducalendar;
@@ -218,22 +202,23 @@ jobs:
           import java.time.DayOfWeek;
           import java.time.LocalDate;
           import java.time.LocalTime;
+          import java.time.ZoneId;
           import java.time.chrono.HijrahDate;
           import java.time.format.DateTimeFormatter;
-          import java.time.format.TextStyle;
           import java.time.temporal.ChronoField;
           import java.util.Locale;
 
           public class MainActivity extends AppCompatActivity {
 
-              private int currentMonthIndex = 0; 
-              private final int YEAR = 2026;
-              private int hijriOffset = 0;
+              // 100 Year Live Engine Variables
+              private int currentMonthIndex; 
+              private int currentYear;
+              private int hijriOffset = 0; // For Moon sighting adjustments in India Server
+              private ZoneId indiaZone = ZoneId.of("Asia/Kolkata");
 
               private LinearLayout calendarGrid;
-              private TextView monthEnglishText, monthUrduText, hijriYearBadgeText, hijriStartDayText;
+              private TextView topAppTitle, monthEnglishText, monthUrduText, hijriYearBadgeText, hijriStartDayText, dateNavText;
               
-              // Live Clock Variables
               private TextView liveTimeText, liveSystemDateText;
               private final Handler handler = new Handler();
 
@@ -268,6 +253,11 @@ jobs:
               protected void onCreate(Bundle savedInstanceState) {
                   super.onCreate(savedInstanceState);
 
+                  // LIVE DATE DETECTION ON APP OPEN
+                  LocalDate systemToday = LocalDate.now(indiaZone);
+                  currentYear = systemToday.getYear();
+                  currentMonthIndex = systemToday.getMonthValue() - 1;
+
                   LinearLayout root = new LinearLayout(this);
                   root.setOrientation(LinearLayout.VERTICAL);
                   root.setBackgroundColor(Color.parseColor("#DDE3F0"));
@@ -283,7 +273,7 @@ jobs:
                   zeeshanBanner.setTypeface(null, Typeface.BOLD);
                   root.addView(zeeshanBanner);
 
-                  // 2. Live System Clock & Date Bar
+                  // 2. Live System Clock
                   LinearLayout clockBar = new LinearLayout(this);
                   clockBar.setOrientation(LinearLayout.VERTICAL);
                   clockBar.setBackgroundColor(Color.parseColor("#1A237E"));
@@ -304,11 +294,8 @@ jobs:
                   clockBar.addView(liveSystemDateText);
 
                   root.addView(clockBar);
-
-                  // 3. Start Live Engine
                   startLiveClock();
 
-                  // 4. Continue Normal UI Layout
                   root.addView(buildTitleBar());
                   root.addView(buildDateInfoBar());
                   root.addView(buildMonthBanner());
@@ -342,11 +329,11 @@ jobs:
                   handler.post(new Runnable() {
                       @Override
                       public void run() {
-                          String time = LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm:ss a"));
-                          String date = LocalDate.now().format(DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy"));
+                          String time = LocalTime.now(indiaZone).format(DateTimeFormatter.ofPattern("hh:mm:ss a"));
+                          String date = LocalDate.now(indiaZone).format(DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy"));
                           liveTimeText.setText(time);
                           liveSystemDateText.setText(date);
-                          handler.postDelayed(this, 1000); // 1 second update loop
+                          handler.postDelayed(this, 1000); 
                       }
                   });
               }
@@ -359,13 +346,12 @@ jobs:
                   bar.setPadding(dp(16), dp(18), dp(16), dp(18));
                   bar.setElevation(dp(8));
 
-                  TextView title = new TextView(this);
-                  title.setText("\u0627\u0631\u062F\u0648 \u06A9\u06CC\u0644\u0646\u0688\u0631 2026");
-                  title.setTextColor(Color.WHITE);
-                  title.setTextSize(20);
-                  title.setTypeface(null, Typeface.BOLD);
-                  title.setLayoutParams(new LinearLayout.LayoutParams(0, -2, 1f));
-                  bar.addView(title);
+                  topAppTitle = new TextView(this);
+                  topAppTitle.setTextColor(Color.WHITE);
+                  topAppTitle.setTextSize(20);
+                  topAppTitle.setTypeface(null, Typeface.BOLD);
+                  topAppTitle.setLayoutParams(new LinearLayout.LayoutParams(0, -2, 1f));
+                  bar.addView(topAppTitle);
 
                   TextView shareBtn = new TextView(this);
                   shareBtn.setText("SHARE");
@@ -376,7 +362,7 @@ jobs:
                   shareBtn.setOnClickListener(v -> {
                       Intent shareIntent = new Intent(Intent.ACTION_SEND);
                       shareIntent.setType("text/plain");
-                      shareIntent.putExtra(Intent.EXTRA_TEXT, "Urdu Calendar 2026");
+                      shareIntent.putExtra(Intent.EXTRA_TEXT, "Urdu Calendar " + currentYear);
                       startActivity(Intent.createChooser(shareIntent, "Share via"));
                   });
                   bar.addView(shareBtn);
@@ -391,33 +377,38 @@ jobs:
                   outer.setPadding(dp(16), dp(12), dp(16), dp(12));
                   outer.setElevation(dp(4));
 
-                  LocalDate today = LocalDate.now();
-                  String engDow = today.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.ENGLISH).toUpperCase();
-                  String engMonShort = today.getMonth().getDisplayName(TextStyle.SHORT, Locale.ENGLISH).toUpperCase();
-
                   LinearLayout row = new LinearLayout(this);
                   row.setOrientation(LinearLayout.HORIZONTAL);
                   row.setGravity(Gravity.CENTER_VERTICAL);
 
                   TextView leftArrow = makeNavArrow("\u276E");
                   leftArrow.setOnClickListener(v -> {
-                      currentMonthIndex = (currentMonthIndex + 11) % 12;
+                      if(currentMonthIndex == 0){
+                          currentMonthIndex = 11;
+                          currentYear--;
+                      } else {
+                          currentMonthIndex--;
+                      }
                       renderMonth();
                   });
                   row.addView(leftArrow);
 
-                  TextView dateText = new TextView(this);
-                  dateText.setText("Selected Year: 2026");
-                  dateText.setTextColor(Color.parseColor("#13265A"));
-                  dateText.setTextSize(15);
-                  dateText.setTypeface(null, Typeface.BOLD);
-                  dateText.setGravity(Gravity.CENTER);
-                  dateText.setLayoutParams(new LinearLayout.LayoutParams(0, -2, 1f));
-                  row.addView(dateText);
+                  dateNavText = new TextView(this);
+                  dateNavText.setTextColor(Color.parseColor("#13265A"));
+                  dateNavText.setTextSize(15);
+                  dateNavText.setTypeface(null, Typeface.BOLD);
+                  dateNavText.setGravity(Gravity.CENTER);
+                  dateNavText.setLayoutParams(new LinearLayout.LayoutParams(0, -2, 1f));
+                  row.addView(dateNavText);
 
                   TextView rightArrow = makeNavArrow("\u276F");
                   rightArrow.setOnClickListener(v -> {
-                      currentMonthIndex = (currentMonthIndex + 1) % 12;
+                      if(currentMonthIndex == 11){
+                          currentMonthIndex = 0;
+                          currentYear++;
+                      } else {
+                          currentMonthIndex++;
+                      }
                       renderMonth();
                   });
                   row.addView(rightArrow);
@@ -508,21 +499,23 @@ jobs:
                   rightCol.addView(hijriYearBadgeText);
 
                   banner.addView(rightCol);
-
                   return banner;
               }
 
               private void renderMonth() {
                   calendarGrid.removeAllViews();
                   int month = currentMonthIndex + 1;
-                  LocalDate firstDay = LocalDate.of(YEAR, month, 1);
+                  LocalDate firstDay = LocalDate.of(currentYear, month, 1);
                   int totalDays = firstDay.lengthOfMonth();
+                  
                   HijrahDate hijriFirst = HijrahDate.from(firstDay.plusDays(hijriOffset));
                   int hMonthIdxFirst = hijriFirst.get(ChronoField.MONTH_OF_YEAR) - 1;
                   String hYearFirst = String.valueOf(hijriFirst.get(ChronoField.YEAR_OF_ERA));
 
+                  topAppTitle.setText("\u0627\u0631\u062F\u0648 \u06A9\u06CC\u0644\u0646\u0688\u0631 " + currentYear);
+                  dateNavText.setText("Selected Year: " + currentYear);
                   monthEnglishText.setText(englishMonths[currentMonthIndex]);
-                  monthUrduText.setText(urduMonths[currentMonthIndex] + "  " + YEAR);
+                  monthUrduText.setText(urduMonths[currentMonthIndex] + "  " + currentYear);
                   hijriStartDayText.setText(String.valueOf(hijriFirst.get(ChronoField.DAY_OF_MONTH)));
                   hijriYearBadgeText.setText((hMonthIdxFirst >= 0 ? hijriMonthsUrdu[hMonthIdxFirst] : "") + "\n" + hYearFirst + "\u06BE");
 
@@ -537,6 +530,7 @@ jobs:
                   }
               }
 
+              // AUTO-FIT ENGINE LOGIC HERE
               private View buildWeekdayRow(int weekday, LocalDate firstDay, int totalDays) {
                   LinearLayout row = new LinearLayout(this);
                   row.setOrientation(LinearLayout.HORIZONTAL);
@@ -551,34 +545,47 @@ jobs:
                   dayTag.setGravity(Gravity.CENTER);
                   dayTag.setPadding(dp(4), dp(10), dp(4), dp(10));
                   dayTag.setElevation(dp(5));
-                  if (weekday == 0) {
-                      dayTag.setBackgroundResource(R.drawable.row_sun_bg);
-                  } else if (weekday == 5) {
-                      dayTag.setBackgroundResource(R.drawable.row_fri_bg);
-                  } else {
-                      dayTag.setBackgroundResource(R.drawable.row_dark_bg);
-                  }
+                  
+                  if (weekday == 0) { dayTag.setBackgroundResource(R.drawable.row_sun_bg); } 
+                  else if (weekday == 5) { dayTag.setBackgroundResource(R.drawable.row_fri_bg); } 
+                  else { dayTag.setBackgroundResource(R.drawable.row_dark_bg); }
+                  
                   LinearLayout.LayoutParams tagParams = new LinearLayout.LayoutParams(dp(76), dp(76));
                   tagParams.setMargins(0, 0, dp(8), 0);
                   dayTag.setLayoutParams(tagParams);
                   row.addView(dayTag);
 
-                  HorizontalScrollView scroller = new HorizontalScrollView(this);
-                  scroller.setHorizontalScrollBarEnabled(false);
+                  // Replaced ScrollView with Weight Layout for perfect screen fit
                   LinearLayout cellsRow = new LinearLayout(this);
                   cellsRow.setOrientation(LinearLayout.HORIZONTAL);
+                  LinearLayout.LayoutParams cellsRowParams = new LinearLayout.LayoutParams(0, -2, 1f);
+                  cellsRow.setLayoutParams(cellsRowParams);
+                  cellsRow.setWeightSum(5f); // Math logic: Max 5 occurrences of a weekday per month
 
+                  int countInMonth = 0;
                   for (int day = 1; day <= totalDays; day++) {
-                      LocalDate loopDate = LocalDate.of(firstDay.getYear(), firstDay.getMonthValue(), day);
+                      LocalDate loopDate = LocalDate.of(currentYear, firstDay.getMonthValue(), day);
                       int isoVal = loopDate.getDayOfWeek().getValue() % 7;
                       if (isoVal != weekday) continue;
-                      cellsRow.addView(buildDateCell(loopDate));
+                      
+                      View cell = buildDateCell(loopDate);
+                      LinearLayout.LayoutParams cellParams = new LinearLayout.LayoutParams(0, dp(70), 1f);
+                      cellParams.setMargins(dp(2), 0, dp(2), 0);
+                      cell.setLayoutParams(cellParams);
+                      cellsRow.addView(cell);
+                      countInMonth++;
                   }
-                  scroller.addView(cellsRow);
-                  LinearLayout.LayoutParams scrollerParams = new LinearLayout.LayoutParams(0, -2, 1f);
-                  scroller.setLayoutParams(scrollerParams);
-                  row.addView(scroller);
+                  
+                  // Fill remaining spaces so cells stay perfectly aligned on left
+                  for(int i = countInMonth; i < 5; i++) {
+                      View emptyView = new View(this);
+                      LinearLayout.LayoutParams emptyParams = new LinearLayout.LayoutParams(0, dp(70), 1f);
+                      emptyParams.setMargins(dp(2), 0, dp(2), 0);
+                      emptyView.setLayoutParams(emptyParams);
+                      cellsRow.addView(emptyView);
+                  }
 
+                  row.addView(cellsRow);
                   return row;
               }
 
@@ -587,32 +594,33 @@ jobs:
                   int hDay = hDate.get(ChronoField.DAY_OF_MONTH);
                   int hMon = hDate.get(ChronoField.MONTH_OF_YEAR);
                   String festivalName = checkIslamicFestival(hDay, hMon);
-                  boolean isToday = loopDate.equals(LocalDate.now());
+                  
+                  LocalDate systemToday = LocalDate.now(indiaZone);
+                  boolean isToday = loopDate.equals(systemToday);
 
                   LinearLayout cell = new LinearLayout(this);
                   cell.setOrientation(LinearLayout.VERTICAL);
                   cell.setGravity(Gravity.CENTER);
-                  cell.setPadding(dp(6), dp(8), dp(6), dp(8));
+                  cell.setPadding(dp(2), dp(8), dp(2), dp(8));
                   cell.setElevation(dp(3));
 
                   if (isToday) {
-                      cell.setBackgroundResource(R.drawable.date_cell_today_bg);
+                      cell.setBackgroundResource(R.drawable.date_cell_today_bg); // Red Box Setup
                   } else if (!festivalName.isEmpty()) {
                       cell.setBackgroundResource(R.drawable.date_cell_festival_bg);
                   } else {
                       cell.setBackgroundResource(R.drawable.date_cell_bg);
                   }
 
-                  LinearLayout.LayoutParams cellParams = new LinearLayout.LayoutParams(dp(64), dp(70));
-                  cellParams.setMargins(0, 0, dp(8), 0);
-                  cell.setLayoutParams(cellParams);
-
                   TextView gregDay = new TextView(this);
                   gregDay.setText(String.valueOf(loopDate.getDayOfMonth()));
                   gregDay.setTextSize(18);
                   gregDay.setTypeface(null, Typeface.BOLD);
                   gregDay.setGravity(Gravity.CENTER);
-                  if (loopDate.getDayOfWeek() == DayOfWeek.SUNDAY) {
+                  
+                  if (isToday) {
+                      gregDay.setTextColor(Color.WHITE); // White text inside red box
+                  } else if (loopDate.getDayOfWeek() == DayOfWeek.SUNDAY) {
                       gregDay.setTextColor(Color.parseColor("#D32F2F"));
                   } else {
                       gregDay.setTextColor(Color.parseColor("#1A1A2E"));
@@ -621,17 +629,24 @@ jobs:
 
                   TextView hijriDay = new TextView(this);
                   hijriDay.setText(hDay + " " + (hMon >= 1 && hMon <= 12 ? hijriMonthsUrdu[hMon - 1] : ""));
-                  hijriDay.setTextSize(9);
+                  hijriDay.setTextSize(8); // Reduced slightly to fit auto-columns
                   hijriDay.setGravity(Gravity.CENTER);
                   hijriDay.setTypeface(null, Typeface.BOLD);
-                  hijriDay.setTextColor(!festivalName.isEmpty() ? Color.parseColor("#1B7A43") : Color.parseColor("#B23A3A"));
+                  
+                  if (isToday) {
+                      hijriDay.setTextColor(Color.WHITE);
+                  } else if (!festivalName.isEmpty()) {
+                      hijriDay.setTextColor(Color.parseColor("#1B7A43"));
+                  } else {
+                      hijriDay.setTextColor(Color.parseColor("#B23A3A"));
+                  }
                   cell.addView(hijriDay);
 
                   if (!festivalName.isEmpty()) {
                       TextView festIcon = new TextView(this);
                       festIcon.setText("\u2606");
                       festIcon.setTextSize(11);
-                      festIcon.setTextColor(Color.parseColor("#1B7A43"));
+                      festIcon.setTextColor(isToday ? Color.WHITE : Color.parseColor("#1B7A43"));
                       festIcon.setGravity(Gravity.CENTER);
                       cell.addView(festIcon);
                   }
@@ -757,3 +772,4 @@ jobs:
         with:
           name: Urdu-Calendar-Poster-App
           path: app/build/outputs/apk/debug/*.apk
+
